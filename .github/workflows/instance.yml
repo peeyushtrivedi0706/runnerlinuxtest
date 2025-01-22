@@ -22,11 +22,10 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      
       # Runs a single command using the runners shell
       - name: Echo hostname of runner
-        run: echo hostname
+        run: hostname
       # Create Session
       - name: Run a one-line script
         run: $Server01 = New-PSSession -ComputerName EC2AMAZ-VBDTDO6
@@ -35,11 +34,11 @@ jobs:
       - name: Run a one-line script
         run: |
          Enter-PSSession -Session $Server01
-         echo hostname
+         hostname
 
       # List and create dir on host server
       - name: Loat and create dir on remote server
         run: I
           ls c:\
-          mkdir "test".
+          mkdir test.
           Exit-PSSession
