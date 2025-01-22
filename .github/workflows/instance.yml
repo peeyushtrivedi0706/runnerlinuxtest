@@ -28,7 +28,7 @@ jobs:
         run: hostname
       # Create Session
       - name: Run a one-line script
-        run: $Server01 = New-PSSession -ComputerName EC2AMAZ-VBDTDO6
+        run: $Server01 = New-PSSession -ComputerName ip-172-31-85-161.ec2.internal
 
       # echo hostname of remote serverl
       - name: Run a one-line script
