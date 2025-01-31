@@ -12,7 +12,7 @@ on:
         default: "Environment"
         type: choice
         options:
-          - windowss-UHG
+          - windowss-latest
           - Dev-ruuner
           - qa-rrunner
       environment:
