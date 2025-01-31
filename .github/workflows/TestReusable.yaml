@@ -1,9 +1,6 @@
 name: ams_imp deployment
 
 on:
-  #push:
-  #branches:
-
   workflow_dispatch:
     inputs:
       runner:
