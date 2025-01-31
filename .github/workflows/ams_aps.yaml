@@ -38,7 +38,7 @@ jobs:
 
       - name: deploy
         run: |
-          Echo "Deploying to ${{github.event.inputs.Target}}"
+          Echo "Deploying to ${{github.event.inputs.Targets}}"
         shell: pwsh
 
       - name: Remove Secure String from the config
