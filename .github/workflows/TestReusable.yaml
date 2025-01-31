@@ -49,7 +49,16 @@ jobs:
       
       # Runs a single command using the runners shell
       - name: Echo hostname of runner
-        run: hostname
+        id: host
+        run: |
+          $zipFileName=hostname
+          echo "::set-output name=artifact_path::$zipFileName"
+
+      - name: Echo hostname of runner
+        id: host-output
+        run: |
+          echo ${{ steps.host.outputs.artifact_path }}
+        
   ams_aps:
     if: (${{github.event.inputs.jobName}} == 'ams_aps')
     strategy:
