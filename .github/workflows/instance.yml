@@ -12,6 +12,36 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      runner:
+        description: "Select the Runner"
+        required: true
+        default: "Environment"
+        type: choice
+        options:
+          - windowss-latest
+          - Dev-ruuner
+          - qa-rrunner
+      environment:
+        description: "Select the Target"
+        required: true
+        default: "Environment"
+        type: choice
+        options:
+          - imp
+      jobName:
+        description: "Select the Job"
+        required: true
+        type: choice
+        options:
+          - ams_aps
+          - ams_prt
+          - ams_rc4_api
+          - ams_tools
+          - ams_web
+          - Start All
+          - Stop All
+
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
