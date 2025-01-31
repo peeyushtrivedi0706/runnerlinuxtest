@@ -56,6 +56,8 @@ jobs:
       # Runs a single command using the runners shell
       - name: Echo hostname of runner
         run: hostname
+      - name: checkout
+        uses: actions/checkout@v4
       - name: reuse
         uses: ./.github/workflows/ams_prt.yaml
         with:
