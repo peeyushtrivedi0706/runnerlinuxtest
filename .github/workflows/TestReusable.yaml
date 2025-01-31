@@ -1,6 +1,7 @@
 name: ams_imp deployment
 
 on:
+  push:
   workflow_dispatch:
     inputs:
       runner:
