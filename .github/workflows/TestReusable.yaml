@@ -1,7 +1,10 @@
 name: ams_imp deployment
 
 on:
-  
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
   workflow_dispatch:
     inputs:
       runner:
