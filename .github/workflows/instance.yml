@@ -56,6 +56,14 @@ jobs:
       # Runs a single command using the runners shell
       - name: Echo hostname of runner
         run: hostname
+      - name: reuse
+        uses: ./.github/workflows/ams_prt.yaml
+        with:
+          environment: ${{ github.event.inputs.environment }}
+          runner: ${{ github.event.inputs.runner }}
+          servicetag: "CORE.IMP-APP-PRT"
+          Targets: ${{ "ts" }}
+    
   ams_aps:
     if: (${{github.event.inputs.jobName}} == 'ams_aps')
     strategy:
