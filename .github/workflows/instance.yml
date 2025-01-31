@@ -19,7 +19,7 @@ on:
         default: "Environment"
         type: choice
         options:
-          - windowss-latest
+          - windows-latest
           - Dev-ruuner
           - qa-rrunner
       environment:
@@ -48,7 +48,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: self-hosted
+    runs-on: windows-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -56,19 +56,27 @@ jobs:
       # Runs a single command using the runners shell
       - name: Echo hostname of runner
         run: hostname
-      # Create Session
-      - name: Run a one-line script
-        run: $Server01 = New-PSSession -ComputerName ip-172-31-85-161.ec2.internal
+  ams_aps:
+    if: (${{github.event.inputs.jobName}} == 'ams_aps')
+    strategy:
+      matrix:
+        target: ["i-0463aee569e9ecce8 - imp_app_aps_server-2 #Production", "i-0760b1d479570257d - imp_app_aps_server-1 #Production"]
+    uses: ./.github/workflows/ams_aps.yaml
+    with:
+          environment: ${{ github.event.inputs.environment }}
+          runner: ${{ github.event.inputs.runner }}
+          servicetag: "CORE.IMP-APP-PRT"
+          Targets: ${{ matrix.target }}
 
-      # echo hostname of remote serverl
-      - name: Run a one-line script
-        run: |
-         Enter-PSSession -Session $Server01
-         hostname
-
-      # List and create dir on host server
-      - name: Loat and create dir on remote server
-        run: I
-          ls c:\
-          mkdir test.
-          Exit-PSSession
+  ams_prt:
+    if: (${{github.event.inputs.jobName}} == 'ams_aps')
+    strategy:
+      matrix:
+        target: ["i-0463aee569e9ecce8 - imp_app_aps_server-2 #Production", "i-0760b1d479570257d - imp_app_aps_server-1 #Production"]
+    uses: ./.github/workflows/ams_prt.yaml
+    with:
+          environment: ${{ github.event.inputs.environment }}
+          runner: ${{ github.event.inputs.runner }}
+          servicetag: "CORE.IMP-APP-PRT"
+          Targets: ${{ matrix.target }}
+         
