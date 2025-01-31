@@ -37,6 +37,16 @@ env:
   ENVIRONMENT: ${{ github.event.inputs.environment }}
   SERVICE_TAG: "CORE.IMP-APP-PRT"
 jobs:
+  init:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      
+      # Runs a single command using the runners shell
+      - name: Echo hostname of runner
+        run: hostname
   ams_aps:
     if: (${{github.event.inputs.jobName}} == 'ams_aps')
     strategy:
