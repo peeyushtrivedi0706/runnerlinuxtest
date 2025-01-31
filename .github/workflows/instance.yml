@@ -62,7 +62,7 @@ jobs:
           environment: ${{ github.event.inputs.environment }}
           runner: ${{ github.event.inputs.runner }}
           servicetag: "CORE.IMP-APP-PRT"
-          Targets: ${{ "ts" }}
+          Targets: "ts"
     
   ams_aps:
     if: (${{github.event.inputs.jobName}} == 'ams_aps')
