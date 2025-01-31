@@ -1,0 +1,52 @@
+name: ams_imp_prt
+
+on:
+  #push:
+  #branches:
+  #- feature/prajakt-workflows
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      runner:
+        description: "The name of the runner"
+        required: true
+        type: string
+      servicetag:
+        description: 'Service Tag'
+        required: true
+        type: string 
+      Targets:
+        description: "Target"
+        required: true
+        type: string
+
+env:
+  ENVIRONMENT: ${{ github.event.inputs.environment }}
+
+jobs:
+  ams_imp_prt:
+    runs-on: ${{ github.event.inputs.runner }}
+
+    env:
+      SERVICE_TAG: ${{ github.event.inputs.servicetag }}
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: deploy
+        run: |
+         echo "Deploying to ${{github.event.inputs.Targets}}"
+        shell: pwsh
+
+      - name: Remove Secure String from the config
+        run: |
+            echo "Removing Secure String from the config prt"
+        shell: pwsh
+
+      - name: Adjust Permissions
+        run: |
+          echo "Adjusting Permissions prt"
+        shell: pwsh

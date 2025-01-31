@@ -1,0 +1,65 @@
+name: ams_imp deployment
+
+on:
+  #push:
+  #branches:
+
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: "Select the Runner"
+        required: true
+        default: "Environment"
+        type: choice
+        options:
+          - windowss-UHG
+          - Dev-ruuner
+          - qa-rrunner
+      environment:
+        description: "Select the Target"
+        required: true
+        default: "Environment"
+        type: choice
+        options:
+          - imp
+      jobName:
+        description: "Select the Job"
+        required: true
+        type: choice
+        options:
+          - ams_aps
+          - ams_prt
+          - ams_rc4_api
+          - ams_tools
+          - ams_web
+          - Start All
+          - Stop All
+
+env:
+  ENVIRONMENT: ${{ github.event.inputs.environment }}
+  SERVICE_TAG: "CORE.IMP-APP-PRT"
+jobs:
+  ams_aps:
+    if: (${{github.event.inputs.jobName}} == 'ams_aps')
+    strategy:
+      matrix:
+        target: ["i-0463aee569e9ecce8 - imp_app_aps_server-2 #Production", "i-0760b1d479570257d - imp_app_aps_server-1 #Production"]
+    uses: ./.github/workflows/ams_aps.yaml
+    with:
+          environment: ${{ github.event.inputs.environment }}
+          runner: ${{ github.event.inputs.runner }}
+          servicetag: "CORE.IMP-APP-PRT"
+          Targets: ${{ matrix.target }}
+
+  ams_prt:
+    if: (${{github.event.inputs.jobName}} == 'ams_aps')
+    strategy:
+      matrix:
+        target: ["i-0463aee569e9ecce8 - imp_app_aps_server-2 #Production", "i-0760b1d479570257d - imp_app_aps_server-1 #Production"]
+    uses: ./.github/workflows/ams_prt.yaml
+    with:
+          environment: ${{ github.event.inputs.environment }}
+          runner: ${{ github.event.inputs.runner }}
+          servicetag: "CORE.IMP-APP-PRT"
+          Targets: ${{ matrix.target }}
+         

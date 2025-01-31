@@ -1,0 +1,52 @@
+name: ams_deployment
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'The name of the runner'
+        required: true
+        type: string
+      runner:
+        description: 'Select the Runner'
+        required: true
+        type: string
+      servicetag:
+        description: 'Service Tag'
+        required: true
+        type: string 
+      Targets:  
+        description: "Target"
+        required: true
+        type: string 
+
+
+env:
+  ENVIRONMENT: ${{ github.event.inputs.environment }}
+  
+jobs:
+  ams_imp_aps:
+
+    runs-on: ${{ github.event.inputs.runner }}
+    environment: ${{ github.event.inputs.environment }}
+    env:
+      SERVICE_TAG: ${{ github.event.inputs.servicetag }}
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: deploy
+        run: |
+          Echo "Deploying to ${{github.event.inputs.Target}}"
+        shell: pwsh
+
+      - name: Remove Secure String from the config
+        run: |
+            echo "Removing Secure String from the config"
+        shell: pwsh
+
+      - name: Adjust Permissions
+        run: |
+         echo "Adjusting Permissions"
+        shell: pwsh
