@@ -97,7 +97,7 @@ jobs:
                 }
               }
               $targetmachine
-              $jo= ($targetmachine -join ",")
+              $jo= targetmachine | ConvertTo-Json
               $jo
               echo "targetmachine=$jo" >> $GITHUB_OUTPUT
 
@@ -105,7 +105,7 @@ jobs:
     runs-on: ${{ github.event.inputs.runner}}
     strategy:
       matrix:
-          target: ${{ needs.Initialize.outputs.output1 }}
+          target: ${{ fromJSON(needs.Initialize.outputs.output1} }}
     needs: Initialize
     steps:
       - name: Wait for Approval
