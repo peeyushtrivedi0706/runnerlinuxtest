@@ -70,7 +70,7 @@ jobs:
               # $targetmachine += $computerName
             #}
             #}
-            powershell.exe -tagname "RCM-AHI.APP.LEGACY" -env "prod"
+            powershell.exe -File .\getInstanceName.ps1 -tagname "RCM-AHI.APP.LEGACY" -env "prod"
 
   deploy:
     runs-on: ${{ github.event.inputs.runner}}
