@@ -59,7 +59,7 @@ jobs:
               $targetmachine = "i-0b1d3c4e2a5f7e9b6,imp_app_aps_server1,Mock"
             }
           } elseif ("${{ github.event.inputs.tagName }}" -eq "RCM-AHI.APP.PHASE2") {
-            $targetmachine = "i-0b1d3c4e2a5f7e9b6,imp_app_aps_server2,Phase2"
+            $targetmachine = '"i-0b1d3c4e2a5f7e9b6,imp_app_aps_server2,Phase2"'
           }
  
           # Convert to JSON and set output
