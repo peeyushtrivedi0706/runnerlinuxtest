@@ -93,9 +93,9 @@ jobs:
                 target = $_ `
                 } `
               ) 
-              $json = '{"include":'+($objects | ConvertTo-Json)+'}'
+              $json = ($objects | ConvertTo-Json)
               $json
-              echo "targetmachine=$json" >> $GITHUB_OUTPUT
+              #echo "targetmachine=$json" >> $GITHUB_OUTPUT
               echo "targetmachine=$(jq -cn --argjson environments "$object" '{target: $environments}')" >> $GITHUB_OUTPUT
              
       - name: echo data
