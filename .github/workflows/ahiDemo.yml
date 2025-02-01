@@ -73,6 +73,9 @@ jobs:
             #}
             #}
             powershell.exe -File .\getInstanceName.ps1 -tagname "RCM-AHI.APP.LEGACY" -env "prod"
+           
+      - name: GetMachineNames
+        run: |
             echo "Deploying to ${{ steps.GetMachineNames.outputs.targetmachine }}"
   
   deploy:
