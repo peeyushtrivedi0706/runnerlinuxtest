@@ -104,8 +104,7 @@ jobs:
   deploy:
     runs-on: ${{ github.event.inputs.runner}}
     strategy:
-      matrix:
-          target: ${{ fromJSON(needs.Initialize.outputs.output1) }}
+      matrix: ${{ fromJSON(needs.Initialize.outputs.output1) }}
     needs: Initialize
     steps:
       - name: Wait for Approval
