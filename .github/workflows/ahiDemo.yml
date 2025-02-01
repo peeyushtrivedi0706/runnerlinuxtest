@@ -71,7 +71,7 @@ jobs:
             #}
             #}
               [array]$targetmachine=@()
-              if("${{github.event.imputs.tagName}}" -eq "RCM-AHI.APP.LEGACY") {
+              if("${{github.event.inputs.tagName}}" -eq "RCM-AHI.APP.LEGACY") {
                   if("${{github.event.inputs.environment}}" -eq "prod") {
                     $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Production"
                     $targetmachine += "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-2 #Production"
@@ -97,7 +97,9 @@ jobs:
                 }
               }
               $targetmachine
-              echo "targetmachine=$targetmachine" >> $GITHUB_OUTPUT
+              $jo= ($targetmachine -join ",")
+              $jo
+              echo "targetmachine=$jo" >> $GITHUB_OUTPUT
 
   deploy:
     runs-on: ${{ github.event.inputs.runner}}
