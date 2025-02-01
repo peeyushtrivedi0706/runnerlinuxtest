@@ -63,18 +63,16 @@ jobs:
           }
  
           # Convert to JSON and set output
-          $jo = ($targetmachine | ConvertTo-Json -Depth 1).Trim()
-          $base64Output = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($jo))
+          $jo = ($targetmachine | ConvertTo-Json -Depth 1 -NoEnumerate).Trim()
           Write-Host "Target Machines JSON: $jo"
-          Write-Host "Base64 Encoded JSON: $base64Output"
-          echo "targetmachine=$base64Output" >> $GITHUB_OUTPUT
+          echo "targetmachine=$jo" >> $GITHUB_OUTPUT
  
   deploy:
     runs-on: ${{ github.event.inputs.runner }}
     needs: Initialize
     strategy:
       matrix:
-        target: ${{ fromJson(fromBase64(needs.Initialize.outputs.output1)) }}
+        target: ${{ fromJson(needs.Initialize.outputs.output1) }}
     steps:
     #  - name: Debug Matrix Value
     #    run: echo "Deploying to target: ${{ matrix.target }}"
