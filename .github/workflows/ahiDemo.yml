@@ -97,7 +97,7 @@ jobs:
                 }
               }
               $targetmachine
-              $jo= targetmachine | ConvertTo-Json
+              $jo= $targetmachine | ConvertTo-Json
               $jo
               echo "targetmachine=$jo" >> $GITHUB_OUTPUT
 
