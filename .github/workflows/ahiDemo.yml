@@ -1,0 +1,116 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: "Select the Runner"
+        required: true
+        default: "Environment"
+        type: choice
+        options:
+          - windows-latest
+          - Dev-ruuner
+          - qa-runner
+          - mock-runner
+          - prod-runner
+      environment:
+        description: "Select the Target"
+        required: true
+        default: "Environment"
+        type: choice
+        options:
+          - dev
+          - qa
+          - mock
+          - prod
+      tagName:
+        description: "Select the Job"
+        required: true
+        type: choice
+        options:
+          - RCM-AHI.APP.LEGACY
+          - RCM-AHI.APP.PHASE2
+          
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  
+  Initialize:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      
+      # Runs a single command using the runners shell
+      - name: Get Machine Names
+        run: |
+         #$instancesJson = aws ec2 describe-instances --filters "Name=tag:Name,Values=*${t}*" --query 'Reservations[].Instances[].[InstanceId, Tags[?Key==`Name`].Value]' --output json
+         # Convert JSON to PowerShell objects
+         # $instances = $instancesJson | ConvertFrom-Json
+         # foreach ($instance in $instances) {
+         # $instance_id = $instance[0]
+         # $name_tag = $instance[1]
+         # #Get computer names
+         # $computerNames = aws ssm describe-instance-information --instance-information-filter-list key=InstanceIds,valueSet=$instance_id --query 'InstanceInformationList[0].ComputerName' --output text --region $region
+          #Loop through computernames and install Chrome
+              #[string[]]$targetmachine= @()
+              #foreach ($computerName in $computerNames) {
+              # $targetmachine += $computerName
+            #}
+            #}
+            if("${{ github.event.imputs.tagName}}" -eq "RCM-AHI.APP.LEGACY") {
+              if("${{ github.event.inputs.environment}}" -eq "prod") {
+                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Production"
+                $targetmachine += "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-2 #Production"
+                $targetmachine += "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-3 #Production"
+              } elseif (" ${{ github.event.inputs.environment}}" -eq "dev") {
+                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Development"
+              } elseif (" ${{ github.event.inputs.environment}}" -eq "qa") {
+                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #QA"
+              } elseif (" ${{ github.event.inputs.environment}}" -eq "mock") {
+                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Mock"
+              }
+            } elseif (" ${{ github.event.inputs.tagName}}" -eq "RCM-AHI.APP.PHASE2") {
+              if("${{ github.event.inputs.environment}}" -eq "prod") {
+                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Production RCM-AHI.APP.PHASE2"
+                $targetmachine += "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-2 #Production RCM-AHI.APP.PHASE2"
+              } elseif (" ${{ github.event.inputs.environment}}" -eq "dev") {
+                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Development RCM-AHI.APP.PHASE2"
+              } elseif (" ${{ github.event.inputs.environment}}" -eq "qa") {
+                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #QA RCM-AHI.APP.PHASE2"
+              } elseif (" ${{ github.event.inputs.environment}}" -eq "mock") {
+                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Mock RCM-AHI.APP.PHASE2"
+                $targetmachine += "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-2 #Mock RCM-AHI.APP.PHASE2"
+              }
+            }
+          ech0 "targetmachine=$targetmachine" >> $GITHUB_ENV
+
+  deploy:
+    runs-on: ${{ github.event.inputs.runner}}
+    strategy:
+      matrix:
+          target: ${{env.targetmachine}}
+    needs: Initialize
+    steps:
+      - name: Wait for Approval
+        run: |
+          echo "Waiting for approval..."
+          sleep 60
+          echo ${{ matrix.target }} 
+
+      - name: Deploy
+        run: |
+          echo "Deploying to ${{ matrix.target }}"
+          # Add your deployment script here
+   
