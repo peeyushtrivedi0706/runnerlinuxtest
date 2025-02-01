@@ -63,7 +63,7 @@ jobs:
           }
  
           # Convert to JSON and set output
-          $jo = ($targetmachine,ConvertTo-Json -Depth 1).Trim()
+          $jo = ($targetmachine | ConvertTo-Json -Depth 1).Trim()
           Write-Host "Target Machines JSON: $jo"
           echo "targetmachine=$jo" >> $GITHUB_OUTPUT
  
