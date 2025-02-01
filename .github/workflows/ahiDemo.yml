@@ -95,8 +95,9 @@ jobs:
               ) 
               $json = ($objects | ConvertTo-Json)
               $json
-              #echo "targetmachine=$json" >> $GITHUB_OUTPUT
-              echo "targetmachine=$(jq -cn --argjson environments "$object" '{target: $environments}')" >> $GITHUB_OUTPUT
+              $myoutput='{"target":["dev","qa","prod"]}'
+              echo "targetmachine=$myoutput" >> $GITHUB_OUTPUT
+              #echo "targetmachine=$(jq -cn --argjson environments "$object" '{target: $environments}')" >> $GITHUB_OUTPUT
              
       - name: echo data
         run: |
