@@ -5,7 +5,7 @@ name: api demo
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
+  #push:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -103,15 +103,14 @@ jobs:
 
   deploy:
     runs-on: ${{ github.event.inputs.runner}}
-    #strategy:
-    #  matrix:
-    #      target: ${{ needs.Initialize.outputs.output1 }}
+    strategy:
+      matrix:
+          target: ${{ needs.Initialize.outputs.output1 }}
     needs: Initialize
     steps:
       - name: Wait for Approval
         run: |
           echo "Waiting for approval..."
-          sleep 60
           echo ${{ needs.Initialize.outputs.output1 }} 
 
       - name: Deploy
