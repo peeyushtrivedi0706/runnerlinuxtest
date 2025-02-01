@@ -67,7 +67,7 @@ jobs:
           Write-Host "Target Machines JSON: $jo"
           echo "targetmachine=$jo" >> $GITHUB_OUTPUT
           Write-Host "GITHUB_OUTPUT:"
-          Get-Content $env:$GITHUB_OUTPUT
+          Get-Content $env:GITHUB_OUTPUT
  
   deploy:
     runs-on: ${{ github.event.inputs.runner }}
