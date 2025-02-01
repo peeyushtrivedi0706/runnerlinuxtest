@@ -104,7 +104,7 @@ jobs:
               [PSCustomObject]@{ `
                 target = $_ `
                 } `
-              } 
+              ) 
               $json = '{"include":'+($objects | ConvertTo-Json)+'}'
               $json
               echo "targetmachine=$json" >> $GITHUB_OUTPUT
