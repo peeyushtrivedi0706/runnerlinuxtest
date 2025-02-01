@@ -52,7 +52,7 @@ jobs:
       output1: ${{ steps.GetMachineNames.outputs.targetmachine }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: GetMachineNames
+      - name: checkout
         uses: actions/checkout@v3
         
       # Runs a single command using the runners shell
@@ -74,7 +74,7 @@ jobs:
             #}
             powershell.exe -File .\getInstanceName.ps1 -tagname "RCM-AHI.APP.LEGACY" -env "prod"
            
-      - name: GetMachineNames
+      - name: echo data
         run: |
             echo "Deploying to ${{ steps.GetMachineNames.outputs.targetmachine }}"
   
