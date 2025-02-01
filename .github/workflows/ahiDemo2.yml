@@ -74,8 +74,8 @@ jobs:
       matrix:
         target: ${{ fromJson(needs.Initialize.outputs.output1) }}
     steps:
-      - name: Debug Matrix Value
-        run: echo "Deploying to target: ${{ matrix.target }}"
+    #  - name: Debug Matrix Value
+    #    run: echo "Deploying to target: ${{ matrix.target }}"
  
       - name: Wait for Approval
         run: echo "Waiting for approval..."
