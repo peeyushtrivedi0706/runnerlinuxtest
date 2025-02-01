@@ -61,12 +61,12 @@ jobs:
           } 
           elseif ("${{ github.event.inputs.tagName }}" -eq "RCM-AHI.APP.PHASE2") {
             if ("${{ github.event.inputs.environment }}" -eq "dev") {
-              $targetmachine = "i-0b1d3c4e2a5f7e9b6,imp_app_aps_server2,Phase2"
+              $targetmachine += "i-0b1d3c4e2a5f7e9b6,imp_app_aps_server2,Phase2"
             }
           }
  
           # Convert to JSON and set output
-          $jo = ($targetmachine | ConvertTo-Json -Depth 1).Trim() -replace '\s+', ''
+          $jo = ($targetmachine | ConvertTo-Json).Trim() -replace '\s+', ''
           Write-Host "Target Machines JSON: $jo"
           echo "targetmachine=$jo" >> $env:GITHUB_OUTPUT
           Write-Host "GITHUB_OUTPUT:"
