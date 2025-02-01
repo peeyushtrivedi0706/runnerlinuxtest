@@ -66,6 +66,8 @@ jobs:
           $jo = ($targetmachine | ConvertTo-Json -Depth 1).Trim()
           Write-Host "Target Machines JSON: $jo"
           echo "targetmachine=$jo" >> $GITHUB_OUTPUT
+          Write-Host "GITHUB_OUTPUT:"
+          cat $GITHUB_OUTPUT
  
   deploy:
     runs-on: ${{ github.event.inputs.runner }}
