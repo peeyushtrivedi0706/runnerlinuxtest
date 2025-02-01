@@ -100,6 +100,14 @@ jobs:
               $jo= $targetmachine | ConvertTo-Json
               $jo
               echo "targetmachine={targets:$jo}" >> $GITHUB_OUTPUT
+              $object = $targetmachine | ForEach-Object ( `
+              [PSCustomObject]@{ `
+                target = $_ `
+                } `
+              } 
+              $json = '{"include":'+($objects | ConvertTo-Json)+'}'
+              $json
+              echo "targetmachine=$json" >> $GITHUB_OUTPUT
 
   deploy:
     runs-on: ${{ github.event.inputs.runner}}
