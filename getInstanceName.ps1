@@ -6,27 +6,27 @@ param (
 [array]$targetmachine=@()
 if($tagname -eq "RCM-AHI.APP.LEGACY") {
               if($env -eq "prod") {
-                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Production"
-                $targetmachine += "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-2 #Production"
-                $targetmachine += "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-3 #Production"
+                $targetmachine = "imp_app_aps_server-1"
+                $targetmachine += "imp_app_aps_server-2"
+                $targetmachine += "imp_app_aps_server-3"
               } elseif ($env -eq "dev") {
-                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Development"
+                $targetmachine = "mp_app_aps_server-1#Development"
               } elseif ($env -eq "qa") {
-                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #QA"
+                $targetmachine = "mp_app_aps_server-1#QA"
               } elseif ($env -eq "mock") {
-                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Mock"
+                $targetmachine = "mp_app_aps_server-1#Mock"
               }
             } elseif ($tagname -eq "RCM-AHI.APP.PHASE2") {
               if($env -eq "prod") {
-                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Production RCM-AHI.APP.PHASE2"
-                $targetmachine += "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-2 #Production RCM-AHI.APP.PHASE2"
+                $targetmachine = "mp_app_aps_server-1RCM-AHI.APP.PHASE2"
+                $targetmachine += "mp_app_aps_server-2RCM-AHI.APP.PHASE2"
               } elseif ($env -eq "dev") {
-                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Development RCM-AHI.APP.PHASE2"
+                $targetmachine = "mp_app_aps_server-1#DevelopmentRCM-AHI.APP.PHASE2"
               } elseif ($env -eq "qa") {
-                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #QA RCM-AHI.APP.PHASE2"
+                $targetmachine = "mp_app_aps_server-1#QARCM-AHI.APP.PHASE2"
               } elseif ($env -eq "mock") {
-                $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Mock RCM-AHI.APP.PHASE2"
-                $targetmachine += "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-2 #Mock RCM-AHI.APP.PHASE2"
+                $targetmachine = "mp_app_aps_server-1#MockRCM-AHI.APP.PHASE2"
+                $targetmachine += "mp_app_aps_server-2#MockRCM-AHI.APP.PHASE2"
               }
             }
 			echo ($targetmachine | ConvertTo-Json)
