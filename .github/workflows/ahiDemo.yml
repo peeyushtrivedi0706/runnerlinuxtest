@@ -100,7 +100,7 @@ jobs:
     runs-on: ${{ github.event.inputs.runner}}
     strategy:
       matrix:
-          target: ${{env.targetmachine}}
+          target: ${{ env.targetmachine }}
     needs: Initialize
     steps:
       - name: Wait for Approval
