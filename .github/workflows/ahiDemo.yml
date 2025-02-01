@@ -99,7 +99,7 @@ jobs:
               $targetmachine
               $jo= $targetmachine | ConvertTo-Json
               $jo
-              echo "targetmachine=$jo" >> $GITHUB_OUTPUT
+              echo "targetmachine={targets:$jo}" >> $GITHUB_OUTPUT
 
   deploy:
     runs-on: ${{ github.event.inputs.runner}}
