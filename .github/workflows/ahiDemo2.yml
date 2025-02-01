@@ -49,21 +49,21 @@ jobs:
  
           if ("${{ github.event.inputs.tagName }}" -eq "RCM-AHI.APP.LEGACY") {
             if ("${{ github.event.inputs.environment }}" -eq "prod") {
-              $targetmachine += "i-0b1d3c4e2a5f7e9b6 | imp_app_aps_server1 | Production"
-              $targetmachine += "i-0b1d3c4e2a5f7e9b6 | imp_app_aps_server2 | Production"
+              $targetmachine += "i-0b1d3c4e2a5f7e9b6,imp_app_aps_server1,Production"
+              $targetmachine += "i-0b1d3c4e2a5f7e9b6,imp_app_aps_server2,Production"
             } elseif ("${{ github.event.inputs.environment }}" -eq "dev") {
-              $targetmachine += "i-0b1d3c4e2a5f7e9b6 | imp_app_aps_server1 | Development"
+              $targetmachine += "i-0b1d3c4e2a5f7e9b6,imp_app_aps_server1,Development"
             } elseif ("${{ github.event.inputs.environment }}" -eq "qa") {
-              $targetmachine += "i-0b1d3c4e2a5f7e9b6 | imp_app_aps_server1 | QA"
+              $targetmachine += "i-0b1d3c4e2a5f7e9b6,imp_app_aps_server1,QA"
             } elseif ("${{ github.event.inputs.environment }}" -eq "mock") {
-              $targetmachine += "i-0b1d3c4e2a5f7e9b6 | imp_app_aps_server1 | Mock"
+              $targetmachine += "i-0b1d3c4e2a5f7e9b6,imp_app_aps_server1,Mock"
             }
           } elseif ("${{ github.event.inputs.tagName }}" -eq "RCM-AHI.APP.PHASE2") {
-            $targetmachine += "i-0b1d3c4e2a5f7e9b6 | imp_app_aps_server2 | Phase2"
+            $targetmachine += "i-0b1d3c4e2a5f7e9b6,imp_app_aps_server2,Phase2"
           }
  
           # Convert to JSON and set output
-          $jo = $targetmachine | ConvertTo-Json -Depth 1
+          $jo = ($targetmachine,ConvertTo-Json -Depth 1).Trim()
           Write-Host "Target Machines JSON: $jo"
           echo "targetmachine=$jo" >> $GITHUB_OUTPUT
  
