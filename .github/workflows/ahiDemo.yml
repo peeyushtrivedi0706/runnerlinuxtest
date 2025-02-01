@@ -58,22 +58,46 @@ jobs:
       # Runs a single command using the runners shell
       - name: GetMachineNames
         run: |
-         #$instancesJson = aws ec2 describe-instances --filters "Name=tag:Name,Values=*${t}*" --query 'Reservations[].Instances[].[InstanceId, Tags[?Key==`Name`].Value]' --output json
-         # Convert JSON to PowerShell objects
-         # $instances = $instancesJson | ConvertFrom-Json
-         # foreach ($instance in $instances) {
-         # $instance_id = $instance[0]
-         # $name_tag = $instance[1]
-         # #Get computer names
-         # $computerNames = aws ssm describe-instance-information --instance-information-filter-list key=InstanceIds,valueSet=$instance_id --query 'InstanceInformationList[0].ComputerName' --output text --region $region
-          #Loop through computernames and install Chrome
-              #[string[]]$targetmachine= @()
-              #foreach ($computerName in $computerNames) {
-              # $targetmachine += $computerName
-            #}
-            #}
-            powershell.exe -File .\getInstanceName.ps1 -tagname "RCM-AHI.APP.LEGACY" -env "prod"
-           
+          [array]$targetmachine=@()
+              if("${{github.event.inputs.tagName}}" -eq "RCM-AHI.APP.LEGACY") {
+                  if("${{github.event.inputs.environment}}" -eq "prod") {
+                    $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Production"
+                    $targetmachine += "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-2 #Production"
+                    $targetmachine += "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-3 #Production"
+                  } elseif ("${{github.event.inputs.environment}}" -eq "dev") {
+                    $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Development"
+                  } elseif ("${{github.event.inputs.environment}}" -eq "qa") {
+                    $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #QA"
+                  } elseif ("${{github.event.inputs.environment}}" -eq "mock") {
+                    $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Mock"
+                  }
+              } elseif ("${{github.event.inputs.tagName}}" -eq "RCM-AHI.APP.PHASE2") {
+                if("${{github.event.inputs.environment}}" -eq "prod") {
+                  $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Production RCM-AHI.APP.PHASE2"
+                  $targetmachine += "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-2 #Production RCM-AHI.APP.PHASE2"
+                } elseif ("${{ github.event.inputs.environment}}" -eq "dev") {
+                  $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Development RCM-AHI.APP.PHASE2"
+                } elseif ("${{github.event.inputs.environment}}" -eq "qa") {
+                  $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #QA RCM-AHI.APP.PHASE2"
+                } elseif ("${{github.event.inputs.environment}}" -eq "mock") {
+                  $targetmachine = "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-1 #Mock RCM-AHI.APP.PHASE2"
+                  $targetmachine += "i-0b1d3c4e2a5f7e9b6 - imp_app_aps_server-2 #Mock RCM-AHI.APP.PHASE2"
+                }
+              }
+              $targetmachine
+              $jo= $targetmachine | ConvertTo-Json
+              $jo
+              echo "targetmachine={targets:$jo}" >> $GITHUB_OUTPUT
+              $object = $targetmachine | ForEach-Object ( `
+              [PSCustomObject]@{ `
+                target = $_ `
+                } `
+              ) 
+              $json = '{"include":'+($objects | ConvertTo-Json)+'}'
+              $json
+              echo "targetmachine=$json" >> $GITHUB_OUTPUT
+              echo "targetmachine=$(jq -cn --argjson environments "$object" '{target: $environments}')" >> $GITHUB_OUTPUT
+             
       - name: echo data
         run: |
             echo "Deploying to ${{ steps.GetMachineNames.outputs.targetmachine }}"
