@@ -1,0 +1,92 @@
+name: Dynamic Matrix API Demo
+ 
+on:
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: "Select the Runner"
+        required: true
+        default: "windows-latest"
+        type: choice
+        options:
+          - windows-latest
+          - Dev-runner
+          - qa-runner
+          - mock-runner
+          - prod-runner
+      environment:
+        description: "Select the Target"
+        required: true
+        default: "Environment"
+        type: choice
+        options:
+          - dev
+          - qa
+          - mock
+          - prod
+      tagName:
+        description: "Select the Job"
+        required: true
+        type: choice
+        options:
+          - RCM-AHI.APP.LEGACY
+          - RCM-AHI.APP.PHASE2
+ 
+env:
+  targetmachine: ""
+ 
+jobs:
+  Initialize:
+    runs-on: ${{ github.event.inputs.runner }}
+    outputs:
+      output1: ${{ steps.set-matrix.outputs.targetmachine }}
+    steps:
+      - name: Generate Target Machines
+        id: set-matrix
+        shell: pwsh
+        run: |
+          $targetmachine = @()
+ 
+          if ("${{ github.event.inputs.tagName }}" -eq "RCM-AHI.APP.LEGACY") {
+            if ("${{ github.event.inputs.environment }}" -eq "prod") {
+              $targetmachine += '"i-0b1d3c4e2a5f7e9b6,imp_app_aps_server1,Production"'
+              $targetmachine += '"i-0b1d3c4e2a5f7e9b6,imp_app_aps_server2,Production"'
+            } elseif ("${{ github.event.inputs.environment }}" -eq "dev") {
+              $targetmachine = '"i-0b1d3c4e2a5f7e9b6,imp_app_aps_server1,Development"'
+            } elseif ("${{ github.event.inputs.environment }}" -eq "qa") {
+              $targetmachine = '"i-0b1d3c4e2a5f7e9b6,imp_app_aps_server1,QA"'
+            } elseif ("${{ github.event.inputs.environment }}" -eq "mock") {
+              $targetmachine = '"i-0b1d3c4e2a5f7e9b6,imp_app_aps_server1,Mock"'
+            }
+          } 
+          elseif ("${{ github.event.inputs.tagName }}" -eq "RCM-AHI.APP.PHASE2") {
+            if ("${{ github.event.inputs.environment }}" -eq "dev") {
+              $targetmachine += '"i-0b1d3c4e2a5f7e9b6,imp_app_aps_server2,Phase2"'
+            }
+          }
+ 
+          # Convert to JSON and set output
+          #$jo = ($targetmachine | ConvertTo-Json).Trim() -replace '\s+', ''
+          $jo = "[" + ($targetmachine -join ",") + "]"
+          Write-Host "Target Machines JSON: $jo"
+          echo "targetmachine=$jo" >> $env:GITHUB_OUTPUT
+          Write-Host "GITHUB_OUTPUT:"
+          Get-Content $env:GITHUB_OUTPUT
+ 
+  deploy:
+    runs-on: ${{ github.event.inputs.runner }}
+    needs: Initialize
+    strategy:
+      matrix:
+        target: ${{ fromJson(needs.Initialize.outputs.output1) }}
+    steps:
+    #  - name: Debug Matrix Value
+    #    run: echo "Deploying to target: ${{ matrix.target }}"
+ 
+      - name: Wait for Approval
+        run: echo "Waiting for approval..."
+ 
+      - name: Deploy Service
+        run: |
+          echo "Deploying to ${{ matrix.target }}"
+          # Add your deployment logic here
