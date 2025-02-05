@@ -37,7 +37,7 @@ env:
  
 jobs:
   Initialize:
-    runs-on: ${{ github.event.inputs.runner }}
+    runs-on: ${{ inputs.runner }}
     outputs:
       output1: ${{ steps.set-matrix.outputs.targetmachine }}
     steps:
@@ -74,7 +74,7 @@ jobs:
           Get-Content $env:GITHUB_OUTPUT
  
   deploy:
-    runs-on: ${{ github.event.inputs.runner }}
+    runs-on: ${{ inputs.runner }}
     needs: Initialize
     strategy:
       matrix:
