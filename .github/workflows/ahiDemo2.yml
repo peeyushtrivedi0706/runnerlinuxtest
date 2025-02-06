@@ -45,6 +45,7 @@ jobs:
         id: set-matrix
         shell: pwsh
         run: |
+          $region= ${{env.region}}
           $targetmachine = @()
  
           if ("${{ github.event.inputs.tagName }}" -eq "RCM-AHI.APP.LEGACY") {
