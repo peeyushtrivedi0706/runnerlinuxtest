@@ -46,7 +46,6 @@ jobs:
         shell: pwsh
         run: |
           
-          ${{ env.Runner}}
           $region= ${{env.region}}
           $targetmachine = @()
  
@@ -79,6 +78,24 @@ jobs:
   deploy:
     runs-on: ${{ inputs.runner }}
     needs: Initialize
+    strategy:
+      matrix:
+        target: ${{ fromJson(needs.Initialize.outputs.output1) }}
+    steps:
+    #  - name: Debug Matrix Value
+    #    run: echo "Deploying to target: ${{ matrix.target }}"
+ 
+      - name: Wait for Approval
+        run: echo "Waiting for approval..."
+ 
+      - name: Deploy Service
+        run: |
+          echo "Deploying to ${{ matrix.target }}"
+          # Add your deployment logic here
+
+  deploy2:
+    runs-on: ${{ inputs.runner }}
+    needs: deploy
     strategy:
       matrix:
         target: ${{ fromJson(needs.Initialize.outputs.output1) }}
