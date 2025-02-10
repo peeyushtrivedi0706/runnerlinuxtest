@@ -34,7 +34,7 @@ on:
  
 env:
   targetmachine: ""
-  Runner: ${{ github.event.inputs.environment }} =='dev' && 'ahiqa-dev' || ${{ github.event.inputs.environment }} =='qa' && 'ahiqa-qa' || ${{ github.event.inputs.environment }} =='mock' && 'ahi-mock' || 'AHI-PROD-Deploy'
+  Runner: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'ahiqa-qa' || ( github.event.inputs.environment=='mock' && 'ahi-mock' || 'AHI-PROD-Deploy'))}}
 jobs:
   Initialize:
     runs-on: windows-latest
