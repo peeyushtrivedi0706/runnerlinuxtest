@@ -37,7 +37,7 @@ env:
   Runner: (${{ github.event.inputs.environment }} =='dev' && 'ahiqa-dev' || (${{ github.event.inputs.environment }} =='qa' && 'ahiqa-qa' || (${{ github.event.inputs.environment }} =='mock' && 'ahi-mock' || 'AHI-PROD-Deploy') }})
 jobs:
   Initialize:
-    runs-on: ${{ env.Runner }}
+    runs-on: windows-latest
     outputs:
       output1: ${{ steps.set-matrix.outputs.targetmachine }}
     steps:
@@ -45,6 +45,9 @@ jobs:
         id: set-matrix
         shell: pwsh
         run: |
+          $r= (${{ github.event.inputs.environment }} =='dev' && 'ahiqa-dev' || (${{ github.event.inputs.environment }} =='qa' && 'ahiqa-qa' || (${{ github.event.inputs.environment }} =='mock' && 'ahi-mock' || 'AHI-PROD-Deploy') }})
+           $r
+           ${{ env.Runner}}
           $region= ${{env.region}}
           $targetmachine = @()
  
