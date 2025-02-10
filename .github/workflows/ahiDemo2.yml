@@ -37,7 +37,7 @@ env:
  
 jobs:
   Initialize:
-    runs-on: ${{ inputs.runner }}
+    runs-on: ${{ github.event.inputs.environment }} =='dev' && 'ahiqa-dev' || (${{ github.event.inputs.environment }} =='qa' && 'ahiqa-qa' || (${{ github.event.inputs.environment }} =='mock' && 'ahi-mock' || 'AHI-PROD-Deploy') }}
     outputs:
       output1: ${{ steps.set-matrix.outputs.targetmachine }}
     steps:
