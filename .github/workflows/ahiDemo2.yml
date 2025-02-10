@@ -37,7 +37,7 @@ env:
   Runner: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'windows-latest' || ( github.event.inputs.environment=='mock' && 'ubuntu-latest' || 'AHI-PROD-Deploy'))}}
 jobs:
   Initialize:
-    runs-on: ${{ env.Runner }}
+    runs-on: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'windows-latest' || ( github.event.inputs.environment=='mock' && 'ubuntu-latest' || 'AHI-PROD-Deploy'))}}
     outputs:
       output1: ${{ steps.set-matrix.outputs.targetmachine }}
     steps:
