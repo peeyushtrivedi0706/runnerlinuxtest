@@ -34,7 +34,7 @@ on:
  
 env:
   targetmachine: ""
-  Runner: (${{ github.event.inputs.environment }} =='dev' && 'ahiqa-dev' || (${{ github.event.inputs.environment }} =='qa' && 'ahiqa-qa' || (${{ github.event.inputs.environment }} =='mock' && 'ahi-mock' || 'AHI-PROD-Deploy') }})
+  Runner: ${{ github.event.inputs.environment }} =='dev' && 'ahiqa-dev' || ${{ github.event.inputs.environment }} =='qa' && 'ahiqa-qa' || ${{ github.event.inputs.environment }} =='mock' && 'ahi-mock' || 'AHI-PROD-Deploy' }})
 jobs:
   Initialize:
     runs-on: ${{ github.event.inputs.environment }} =='dev' && 'ahiqa-dev' || ${{ github.event.inputs.environment }} =='qa' && 'ahiqa-qa' || ${{ github.event.inputs.environment }} =='mock' && 'ahi-mock' || 'AHI-PROD-Deploy'
@@ -45,7 +45,7 @@ jobs:
         id: set-matrix
         shell: pwsh
         run: |
-          $r= (${{ github.event.inputs.environment }} =='dev' && 'ahiqa-dev' || (${{ github.event.inputs.environment }} =='qa' && 'ahiqa-qa' || (${{ github.event.inputs.environment }} =='mock' && 'ahi-mock' || 'AHI-PROD-Deploy') }})
+          $r= ${{ github.event.inputs.environment }} =='dev' && 'ahiqa-dev' || ${{ github.event.inputs.environment }} =='qa' && 'ahiqa-qa' || ${{ github.event.inputs.environment }} =='mock' && 'ahi-mock' || 'AHI-PROD-Deploy'
            $r
            ${{ env.Runner}}
           $region= ${{env.region}}
