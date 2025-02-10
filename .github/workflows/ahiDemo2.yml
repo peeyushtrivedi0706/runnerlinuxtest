@@ -95,10 +95,8 @@ jobs:
 
   deploy2:
     runs-on: ${{ inputs.runner }}
-    needs: [Initialize,deploy]
-    strategy:
-      matrix:
-        target: ${{ fromJson(needs.Initialize.outputs.output1) }}
+    needs: [deploy]
+    
     steps:
     #  - name: Debug Matrix Value
     #    run: echo "Deploying to target: ${{ matrix.target }}"
