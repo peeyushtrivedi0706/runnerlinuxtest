@@ -34,10 +34,10 @@ on:
  
 env:
   targetmachine: ""
-  Runner: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'ahiqa-qa' || ( github.event.inputs.environment=='mock' && 'ahi-mock' || 'AHI-PROD-Deploy'))}}
+  Runner: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'windows-latest' || ( github.event.inputs.environment=='mock' && 'ubuntu-latest' || 'AHI-PROD-Deploy'))}}
 jobs:
   Initialize:
-    runs-on: windows-latest
+    runs-on: ${{ env.Runner }}
     outputs:
       output1: ${{ steps.set-matrix.outputs.targetmachine }}
     steps:
