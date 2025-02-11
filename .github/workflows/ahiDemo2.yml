@@ -97,7 +97,7 @@ jobs:
  
       - name: Deploy Service
         run: |
-          echo "${{env.test}}"
+          echo "${{vars.test}}"
           echo "Deploying to ${{ matrix.target }}"
           # Add your deployment logic here
 
