@@ -1,5 +1,5 @@
 name: Dynamic Matrix API Demo
- 
+
 on:
   workflow_dispatch:
     inputs:
@@ -33,8 +33,9 @@ on:
           - RCM-AHI.APP.PHASE2
  
 env:
+  ENV_NAME: ${{github.event.inputs.environment}}
   targetmachine: ""
-  Runner: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'windows-latest' || ( github.event.inputs.environment=='mock' && 'ubuntu-latest' || 'AHI-PROD-Deploy'))}}
+  Runner: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'windows-latest' || ( github.event.inputs.environment=='mock' && 'ubuntu-latest' || 'windows-latest'))}}
 jobs:
   Initialize:
     runs-on: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'windows-latest' || ( github.event.inputs.environment=='mock' && 'ubuntu-latest' || 'AHI-PROD-Deploy'))}}
@@ -45,7 +46,7 @@ jobs:
         id: set-matrix
         shell: pwsh
         run: |
-          
+          echo ${{ env.test}}
           $region= ${{env.region}}
           $targetmachine = @()
  
