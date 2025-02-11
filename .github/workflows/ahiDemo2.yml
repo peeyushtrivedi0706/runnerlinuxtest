@@ -39,7 +39,8 @@ env:
 jobs:
   Initialize:
     runs-on: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'windows-latest' || ( github.event.inputs.environment=='mock' && 'ubuntu-latest' || 'windows-latest'))}}
-    environment: ${{ github.event.inputs.environment}}
+    environment: 
+      name: ${{ github.event.inputs.environment}}
     outputs:
       output1: ${{ steps.set-matrix.outputs.targetmachine }}
     steps:
@@ -48,6 +49,7 @@ jobs:
         shell: pwsh
         run: |
           echo "${{ env.test}}"
+          echo "${{ env.TEST}}"
           $region= ${{env.region}}
           $targetmachine = @()
  
