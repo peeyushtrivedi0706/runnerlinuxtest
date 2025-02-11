@@ -38,7 +38,7 @@ env:
   Runner: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'windows-latest' || ( github.event.inputs.environment=='mock' && 'ubuntu-latest' || 'windows-latest'))}}
 jobs:
   Initialize:
-    runs-on: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'windows-latest' || ( github.event.inputs.environment=='mock' && 'ubuntu-latest' || 'AHI-PROD-Deploy'))}}
+    runs-on: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'windows-latest' || ( github.event.inputs.environment=='mock' && 'ubuntu-latest' || 'windows-latest'))}}
     outputs:
       output1: ${{ steps.set-matrix.outputs.targetmachine }}
     steps:
@@ -91,6 +91,7 @@ jobs:
  
       - name: Deploy Service
         run: |
+          echo "${{env.test}}"
           echo "Deploying to ${{ matrix.target }}"
           # Add your deployment logic here
 
@@ -107,5 +108,6 @@ jobs:
  
       - name: Deploy Service
         run: |
+          echo "${{env.test}}"
           echo "Deploying to ${{ matrix.target }}"
           # Add your deployment logic here
