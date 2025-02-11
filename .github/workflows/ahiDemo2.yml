@@ -51,6 +51,8 @@ jobs:
           echo "${{ env.test}}"
           echo "${{ env.TEST}}"
           echo "${{vars.TEST}}"
+          echo "$test"
+          echo "${{vars.test}}"
           $region= ${{env.region}}
           $targetmachine = @()
  
