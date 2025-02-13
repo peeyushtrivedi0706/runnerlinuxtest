@@ -49,6 +49,7 @@ jobs:
         shell: pwsh
         run: |
           echo "${{ vars.ENV_NAME}}"
+           echo "${{ env.ENV_NAME}}"
           echo "${{ env.TEST}}"
           echo "${{vars.TEST}}"
           echo "$test"
