@@ -119,23 +119,11 @@ jobs:
     #    run: echo "Deploying to target: ${{ matrix.target }}"
  
       - name: script-output
-        uses: actions/github-script@v6
-        with:
-          script: |
-            import { Octokit } from "@octokit/action";
-            const octokit = new Octokit({
-              auth: "${{GITHUB.TOKEN}}"
-            })
-            
-            output = await octokit.request('GET /repos/{owner}/{repo}/environments/{environment_name}/variables', {
-              owner: 'peeyushtrivedi0706',
-              repo: 'runnerlinuxtest',
-              environment_name: 'QA',
-              headers: {
-                'X-GitHub-Api-Version': '2022-11-28'
-              }
-            })
-            core.setOutput('my_output', output);
+        run: |
+            Auth_url='https://api.github.com/repos/peeyushtrivedi0706/runnerlinuxtest/environments/qa/variables'
+            Response=$(curl -H "Accept: application/vnd.github+json" -s -H "Authorization: Bearer ${{ GITHUB.TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" $Auth_url) 
+            echo "response: $Response"
+            echo "my_output=$Response" >> $env:GITHUB_OUTPUT
             
  
       - name: Deploy Service
