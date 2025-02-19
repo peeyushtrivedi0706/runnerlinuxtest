@@ -122,6 +122,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            import { Octokit } from "@octokit/action";
             const octokit = new Octokit({
               auth: "${{GITHUB.TOKEN}}"
             })
