@@ -118,11 +118,28 @@ jobs:
     #  - name: Debug Matrix Value
     #    run: echo "Deploying to target: ${{ matrix.target }}"
  
-      - name: Wait for Approval
-        run: echo "Waiting for approval..."
+      - name: script-output
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const octokit = new Octokit({
+              auth: "${{GITHUB.TOKEN}}"
+            })
+            
+            output = await octokit.request('GET /repos/{owner}/{repo}/environments/{environment_name}/variables', {
+              owner: 'peeyushtrivedi0706',
+              repo: 'runnerlinuxtest',
+              environment_name: 'QA',
+              headers: {
+                'X-GitHub-Api-Version': '2022-11-28'
+              }
+            })
+            core.setOutput('my_output', output);
+            
  
       - name: Deploy Service
         run: |
           echo "${{env.test}}"
           echo "Deploying to ${{ matrix.target }}"
+          echo "Output from script: ${{ steps.script-output.outputs.my_output }}"
           # Add your deployment logic here
