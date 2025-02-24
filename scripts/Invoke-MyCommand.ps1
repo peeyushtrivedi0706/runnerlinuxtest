@@ -1,24 +1,23 @@
 param(
     [string]$ComputerName,
-    [Parameter]
-    [string]$ScriptBlock,
-    [string] $FilePath,
-    $ArgumentList
+    [ScriptBlock]$ScriptBlock,
+    $FilePath=$null,
+    $ArgumentList=$null
     )   
 
 # Execute the command locally or remotely
 if ($ComputerName -eq "localhost") {  
     if($FilePath -ne $null) {
         if($ArgumentList -ne $null) {
-            . $FilePath @ArgumentList
+            & $FilePath @ArgumentList
         } else {
-            . $FilePath
+            & $FilePath
         }
     } else {
       if($ArgumentList -ne $null) {
-            Invoke-Expression $ScriptBlock @ArgumentList
+            & $ScriptBlock @ArgumentList
         } else {
-            Invoke-Expression $ScriptBlock
+            & $ScriptBlock
         }
     }     
 } else {
