@@ -1,7 +1,7 @@
 param(
     [string]$ComputerName,
     [Parameter]
-    $ScriptBlock,
+    [string]$ScriptBlock,
     [string] $FilePath,
     $ArgumentList
     )   
@@ -16,9 +16,9 @@ if ($ComputerName -eq "localhost") {
         }
     } else {
       if($ArgumentList -ne $null) {
-            & $ScriptBlock @ArgumentList
+            Invoke-Expression $ScriptBlock @ArgumentList
         } else {
-            & $ScriptBlock
+            Invoke-Expression $ScriptBlock
         }
     }     
 } else {
@@ -30,9 +30,9 @@ if ($ComputerName -eq "localhost") {
         }
     } else {
         if($ArgumentList -ne $null) {
-            Invoke-Command -ComputerName $ComputerName -ScriptBlock $ScriptBlock -ArgumentList $ArgumentList
+            Invoke-Command -ComputerName $ComputerName -ScriptBlock ([scriptblock]::Create($ScriptBlock)) -ArgumentList $ArgumentList
         } else {
-            Invoke-Command -ComputerName $ComputerName -ScriptBlock $ScriptBlock
+            Invoke-Command -ComputerName $ComputerName -ScriptBlock ([scriptblock]::Create($ScriptBlock))
         }
     }
 }
