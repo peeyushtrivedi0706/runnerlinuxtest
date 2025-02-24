@@ -1,11 +1,11 @@
 param(
     [string]$ComputerName,
     [Parameter]
-    [scriptblock]$ScriptBlock,
+    [string]$ScriptBlock,
     [string] $FilePath,
     $ArgumentList
     )   
-
+$ScriptBlock = [scriptblock]::Create($ScriptBlock)
 # Execute the command locally or remotely
 if ($ComputerName -eq "localhost") {  
     if($FilePath -ne $null) {
