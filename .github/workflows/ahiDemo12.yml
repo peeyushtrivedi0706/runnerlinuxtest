@@ -37,16 +37,16 @@ env:
   targetmachine: ""
   Runner: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'windows-latest' || ( github.event.inputs.environment=='mock' && 'ubuntu-latest' || 'windows-latest'))}}
 jobs:
-  Wait-for-Approval:
-    runs-on: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'windows-latest' || ( github.event.inputs.environment=='mock' && 'ubuntu-latest' || 'windows-latest'))}}
-    environment:
-      name: approval-check
-    steps:
-    - name: Approval step
-      run: echo "This is the approval-check environment"
+#  Wait-for-Approval:
+#    runs-on: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'windows-latest' || ( github.event.inputs.environment=='mock' && 'ubuntu-latest' || 'windows-latest'))}}
+#    environment:
+#      name: approval-check
+#    steps:
+#    - name: Approval step
+#      run: echo "This is the approval-check environment"
   Initialize:
     runs-on: ${{ github.event.inputs.environment =='dev' && 'ahiqa-dev' || (github.event.inputs.environment  =='qa' && 'windows-latest' || ( github.event.inputs.environment=='mock' && 'ubuntu-latest' || 'windows-latest'))}}
-    needs: Wait-for-Approval
+   # needs: Wait-for-Approval
     environment: 
       name: ${{ github.event.inputs.environment}}
     outputs:
@@ -76,11 +76,12 @@ jobs:
       - name: Debug Matrix Value
         run: |
           echo "Deploying to target:${{ matrix.target }}"
-            .\scripts\Invoke-MyCommand.ps1 -Computername ${{ matrix.target }} -ScriptBlock {
+          $scriptBlock = {
               $host=hostname
               echo "running on $host"
               ls
-              }
+          }
+          .\scripts\Invoke-MyCommand.ps1 -Computername ${{ matrix.target }} -ScriptBlock $scriptBlock
         shell: powershell
 
  
