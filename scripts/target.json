@@ -1,0 +1,43 @@
+[
+    {
+        "environment": "mock",
+            "applications": [
+            {
+                "name": "RCM-AHI.APP.LEGACY",
+                "instanceNameTag" : ["ME*APPL*"]
+            },
+            {
+                "name": "RCM-AHI.WEB",
+                "instanceNameTag": ["ME*WEB*"]
+            },
+            {
+                "name": "RCM-AHI.Phase2",
+                "instanceNameTag": ["ME*APPN*"]
+            },
+			{
+                "name": "RCM-AHI.DB.UPDATE",
+                "instanceNameTag": "MEC2AHIAPPN01B"
+            }
+        ]
+    },
+	{   "environment": "production",
+            "applications": [
+            {
+                "name": "RCM-AHI.APP.LEGACY",
+                "instanceNameTag" : ["PE*APPL*"]
+            },
+            {
+                "name": "RCM-AHI.WEB",
+                "instanceNameTag": ["PE*WEB*"]
+            },
+            {
+                "name": "RCM-AHI.Phase2",
+                "instanceNameTag": ["PE*APPN*"]
+            },
+			{
+                "name": "RCM-AHI.DB.UPDATE",
+                "instanceNameTag": "PEC2AHIAPPN01A"
+            }
+        ]
+	}
+]
