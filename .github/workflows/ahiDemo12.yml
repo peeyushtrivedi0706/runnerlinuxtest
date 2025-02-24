@@ -50,56 +50,26 @@ jobs:
     environment: 
       name: ${{ github.event.inputs.environment}}
     outputs:
-      output1: ${{ steps.set-matrix.outputs.targetmachine }}
+      Target: ${{ steps.set-matrix.outputs.targetMachines }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Generate Target Machines
         id: set-matrix
         shell: pwsh
         run: |
-          echo "${{ vars.ENV_NAME}}"
-           echo "${{ env.ENV_NAME}}"
-          echo "${{ env.TEST}}"
-          echo "${{vars.TEST}}"
-          echo "$test"
-          echo "${{vars.test}}"
-          $region= ${{env.region}}
-          $targetmachine = @()
- 
-          if ("${{ github.event.inputs.tagName }}" -eq "RCM-AHI.APP.LEGACY") {
-            if ("${{ github.event.inputs.environment }}" -eq "prod") {
-              $targetmachine += '"i-0b1d3c4e2a5f7e9b6,imp_app_aps_server1,Production"'
-              $targetmachine += '"i-0b1d3c4e2a5f7e9b6,imp_app_aps_server2,Production"'
-            } elseif ("${{ github.event.inputs.environment }}" -eq "dev") {
-              $targetmachine = '"i-0b1d3c4e2a5f7e9b6,imp_app_aps_server1,Development"'
-            } elseif ("${{ github.event.inputs.environment }}" -eq "qa") {
-              $targetmachine = '"i-0b1d3c4e2a5f7e9b6,imp_app_aps_server1,QA"'
-            } elseif ("${{ github.event.inputs.environment }}" -eq "mock") {
-              $targetmachine = '"i-0b1d3c4e2a5f7e9b6,imp_app_aps_server1,Mock"'
-            }
-          } 
-          elseif ("${{ github.event.inputs.tagName }}" -eq "RCM-AHI.APP.PHASE2") {
-            if ("${{ github.event.inputs.environment }}" -eq "dev") {
-              $targetmachine += '"i-0b1d3c4e2a5f7e9b6,imp_app_aps_server2,Phase2"'
-            }
-          }
- 
-          # Convert to JSON and set output
-          #$jo = ($targetmachine | ConvertTo-Json).Trim() -replace '\s+', ''
-          $jo = "[" + ($targetmachine -join ",") + "]"
-          Write-Host "Target Machines JSON: $jo"
-          echo "targetmachine=$jo" >> $env:GITHUB_OUTPUT
-          Write-Host "GITHUB_OUTPUT:"
-          Get-Content $env:GITHUB_OUTPUT
- 
+           powershell.exe ${{ github.workspace }}\scripts\InitializeEnvironments.ps1 -targetTag ${{ github.event.inputs.targetTag }} -environment ${{ github.event.inputs.environment }} -region ${{ vars.region }}
+
+          
   deploy:
     runs-on: ${{ inputs.runner }}
     needs: Initialize
     strategy:
       matrix:
-        target: ${{ fromJson(needs.Initialize.outputs.output1) }}
+        target: ${{ fromJson(needs.Initialize.outputs.Target) }}
     steps:
-    #  - name: Debug Matrix Value
-    #    run: echo "Deploying to target: ${{ matrix.target }}"
+      - name: Debug Matrix Value
+        run: echo "Deploying to target:${{ matrix.target }}"
  
       - name: Wait for Approval
         run: echo "Waiting for approval..."
@@ -120,26 +90,7 @@ jobs:
  
       - name: script-output
         run: |
-            $headers = @{
-                "Authorization" = "Bearer ${{ secrets.GITHUB_TOKEN }}"
-                "X-GitHub-Api-Version" = "2022-11-28"
-                "Accept" = "application/vnd.github+json"
-            }
-            
-            $uri = "https://api.github.com/repos/peeyushtrivedi0706/runnerlinuxtest/environments/qa/variables"
-            
-            try {
-                $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $headers
-                Write-Output "API call successful."
-                
-                # Accessing data from the object
-                Write-Output $response
-             echo "my_output=$response" >> $env:GITHUB_OUTPUT
-                
-            } catch {
-                Write-Error "API call failed: $($_.Exception.Message)"
-            }
-            
+            echo ${{matrix.target}}
  
       - name: Deploy Service
         run: |
