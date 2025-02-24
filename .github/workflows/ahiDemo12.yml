@@ -76,12 +76,11 @@ jobs:
       - name: Debug Matrix Value
         run: |
           echo "Deploying to target:${{ matrix.target }}"
-          $scriptBlockString = @'
-              `$host=hostname
-              echo "running on `$host"
-              ls
-          '@
-          .\scripts\Invoke-MyCommand.ps1 -Computername ${{ matrix.target }} -ScriptBlock ([scriptblock]::Create($scriptBlockString))
+          .\scripts\Invoke-MyCommand.ps1 -Computername ${{ matrix.target }} -ScriptBlock {
+            $host=hostname
+            echo "running on $host"
+            ls
+          }
         shell: powershell
 
  
