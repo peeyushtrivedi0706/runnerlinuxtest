@@ -71,7 +71,8 @@ jobs:
       matrix:
         target: ${{ fromJson(needs.Initialize.outputs.Target) }}
     steps:
-      
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Debug Matrix Value
         run: |
           echo "Deploying to target:${{ matrix.target }}"
