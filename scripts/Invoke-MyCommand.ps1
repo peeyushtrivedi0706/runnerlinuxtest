@@ -1,7 +1,7 @@
 param(
     [string]$ComputerName,
     [Parameter]
-    [scriptblock]$ScriptBlock,
+    $ScriptBlock,
     [string] $FilePath,
     $ArgumentList
     )   
