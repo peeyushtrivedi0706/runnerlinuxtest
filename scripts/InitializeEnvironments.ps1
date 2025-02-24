@@ -46,7 +46,7 @@ function Get-Instances {
     return $targetMachines
 }
 if($environment -eq "dev" -OR $environment -eq "qa") {
-    $targetMachines="localhost"
+    $targetMachines='"'+"localhost"+'"'
     $jo = "[" + ($targetMachines -join ", ") + "]"
     Write-Host "Target Machines JSON: $jo"
  
