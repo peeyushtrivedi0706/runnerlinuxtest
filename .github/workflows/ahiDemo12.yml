@@ -71,6 +71,7 @@ jobs:
       matrix:
         target: ${{ fromJson(needs.Initialize.outputs.Target) }}
     steps:
+      
       - name: Debug Matrix Value
         run: |
           echo "Deploying to target:${{ matrix.target }}"
@@ -79,6 +80,7 @@ jobs:
               echo "running on $host"
               ls
               }
+        shell: powershell
 
  
       - name: Wait for Approval
