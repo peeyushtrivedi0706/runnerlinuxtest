@@ -58,7 +58,10 @@ jobs:
         id: set-matrix
         shell: pwsh
         run: |
-           powershell.exe ${{ github.workspace }}\scripts\InitializeEnvironments.ps1 -targetTag ${{ github.event.inputs.environment }} -environment ${{ github.event.inputs.environment }} -region ${{ vars.region }}
+           powershell.exe ${{ github.workspace }}\scripts\InitializeEnvironments.ps1 `
+           -targetTag ${{ github.event.inputs.environment }} `
+           -environment ${{ github.event.inputs.environment }} `
+           -region "us-east-1"
 
           
   deploy:
