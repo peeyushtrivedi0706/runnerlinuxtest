@@ -72,7 +72,14 @@ jobs:
         target: ${{ fromJson(needs.Initialize.outputs.Target) }}
     steps:
       - name: Debug Matrix Value
-        run: echo "Deploying to target:${{ matrix.target }}"
+        run: |
+          echo "Deploying to target:${{ matrix.target }}"
+            .\scripts\Invoke-MyCommand.ps1 -Computername ${{ matrix.target }} -ScriptBlock {
+              $host=hostname
+              echo "running on $host"
+              ls
+              }
+
  
       - name: Wait for Approval
         run: echo "Waiting for approval..."
