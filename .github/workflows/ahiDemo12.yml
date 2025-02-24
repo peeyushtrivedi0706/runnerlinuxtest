@@ -1,4 +1,4 @@
-name: 🔆Dynamic Matrix API Demo
+name: 🔆Dynamic Matrix Target Demo
 
 on:
   workflow_dispatch:
