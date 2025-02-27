@@ -24,7 +24,7 @@ function Get-Instances {
         $name_tag = $instance[1]
  
         # Fetch computer names from AWS SSM
-        $ComputerNames = $ 'C:\Program Files\Amazon\AWSCLIV2\aws.exe' ssm describe-instance-information --instance-information-filter-list key=InstanceIds,valueSet=$instance_id --query 'InstanceInformationList[0].ComputerName' --output text --region $region
+        $ComputerNames = & 'C:\Program Files\Amazon\AWSCLIV2\aws.exe' ssm describe-instance-information --instance-information-filter-list key=InstanceIds,valueSet=$instance_id --query 'InstanceInformationList[0].ComputerName' --output text --region $region
  
         # Add to target machines
         foreach ($ComputerName in $ComputerNames) {
