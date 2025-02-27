@@ -14,7 +14,7 @@ function Get-Instances {
     )
     $targetMachines = @()
     # Fetch instance IDs and names using the filter
-    $instancesJson = aws ec2 describe-instances --filters "Name=tag:Name,Values=${filterQuery}" --query 'Reservations[].Instances[].[InstanceId, Tags[?Key==`Name`].Value]' --output json
+    $instancesJson = & 'C:\Program Files\Amazon\AWSCLIV2\aws.exe' ec2 describe-instances --filters "Name=tag:Name,Values=${filterQuery}" --query 'Reservations[].Instances[].[InstanceId, Tags[?Key==`Name`].Value]' --output json
 
     $instances = $instancesJson | ConvertFrom-Json
  
@@ -24,7 +24,7 @@ function Get-Instances {
         $name_tag = $instance[1]
  
         # Fetch computer names from AWS SSM
-        $ComputerNames = aws ssm describe-instance-information --instance-information-filter-list key=InstanceIds,valueSet=$instance_id --query 'InstanceInformationList[0].ComputerName' --output text --region $region
+        $ComputerNames = $ 'C:\Program Files\Amazon\AWSCLIV2\aws.exe' ssm describe-instance-information --instance-information-filter-list key=InstanceIds,valueSet=$instance_id --query 'InstanceInformationList[0].ComputerName' --output text --region $region
  
         # Add to target machines
         foreach ($ComputerName in $ComputerNames) {
