@@ -1,0 +1,66 @@
+name: Clearance sample workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select the environment"
+        required: true
+        default: "Selection needed"
+        type: choice
+        options:
+          - ams_prod
+          - ams_imp
+          - ams_mock
+          - Selection needed
+         
+env:
+  environment: ${{ github.event.inputs.environment }}
+  # appName: ${{inputs.applications=='ams_aps' && 'APS' || (inputs.applications == 'ams_prt' && 'PRT' || (inputs.applications == 'ams_web_rcplus' && 'Web_RCPlus' || (inputs.applications == 'ams_rc4_api' && 'RC4API')))}}
+  appName: "JUMPTest"
+
+jobs:
+  InitializeMatrix:
+    runs-on: ${{inputs.environment == 'ams_mock'  && 'windows' || (inputs.environment == 'ams_imp'  && 'CLR-MOCK' || 'windows')}}
+    outputs:
+      Target: ${{steps.set-output.outputs.Target}}
+    steps:
+      - name: Check user info
+        run: |
+          $hostname = hostname
+          Write-Host "Running on host: $hostname"
+          Write-Host "Path"
+          pwd
+          Write-Host "list files"
+          dir
+          Write-Host "current user info 1"
+          Get-LocalUser | Where-Object { $_.Name -eq $env:USERNAME }
+          Write-Host "current user info 2"
+          whoami /user
+          Write-Host "current user info 3"
+          $env:USERNAME
+          Write-Host "current user info 4"
+          Get-WmiObject -Class Win32_ComputerSystem | Select-Object -Property UserName
+
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Set output
+        id: set-output
+        run: |
+          powershell.exe -File "${{github.workspace}}\scripts\get-run-matrix.ps1" -environment ${{inputs.environment}} -region ${{ vars.region }} -appName ${{ env.appName }}
+  
+  
+  sampleTest:
+    needs: [InitializeMatrix]
+    strategy:
+      matrix:
+        Target: ${{fromJson(needs.InitializeMatrix.outputs.Target)}}
+        # Target: ["1", "2"]
+    runs-on: ${{inputs.environment == 'ams_mock'  && 'windows' || (inputs.environment == 'ams_imp'  && 'CLR-MOCK' || 'windows')}}
+    steps:
+      - name: Testing
+        run: |
+          Invoke-Command -Computername ${{ matrix.target }} -FilePath ${{ github.workspace }}\scripts\Test.ps1
+
+      
