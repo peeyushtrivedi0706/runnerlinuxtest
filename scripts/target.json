@@ -1,43 +1,1006 @@
 [
-    {
-        "environment": "mock",
-            "applications": [
-            {
-                "name": "RCM-AHI.APP.LEGACY",
-                "instanceNameTag" : ["ME*APPL*"]
-            },
-            {
-                "name": "RCM-AHI.WEB",
-                "instanceNameTag": ["ME*WEB*"]
-            },
-            {
-                "name": "RCM-AHI.Phase2",
-                "instanceNameTag": ["ME*APPN*"]
-            },
-			{
-                "name": "RCM-AHI.DB.UPDATE",
-                "instanceNameTag": "MEC2AHIAPPN01B"
-            }
+  {
+    "environment": "ams_sales",
+    "applications": [
+      {
+        "name": "GMSAppPool",
+        "serviceTagName": "CORE.SLS-APP-APS"
+      },
+      {
+        "name": "IISAppPool",
+        "serviceTagName": "CORE.SLS-APP-APS"
+      },
+      {
+        "name": "EventStoreScavange",
+        "serviceTagName": "CORE.SLS-APP-APS"
+      },
+      {
+        "name": "DotNetCore",
+        "serviceTagName": "CORE.SLS-APP-APS"
+      },
+      {
+        "name": "APS",
+        "serviceTagName": "CORE.SLS-APP-APS"
+      },
+      {
+        "name": "WEB",
+        "serviceTagName": "CORE.SLS-WEB"
+      },
+      {
+        "name": "TRAINING-WEB",
+        "serviceTagName": "CORE.SLS-TR-WEB"
+      },
+      {
+        "name": "PRT",
+        "serviceTagName": "CORE.SLS-APP-PRT"
+      },
+      {
+        "name": "RC4-API",
+        "serviceTagName": "CORE.SLS-APP-WBA-RC4"
+      },
+      {
+        "name": "Web_RCPlus",
+        "serviceTagName": "CORE.SLS-WEB-WPL"
+      },
+      {
+        "name": "Tools",
+        "serviceTagName": "CORE.SLS-APP-TOOLS-ADMIN-SVR"
+      },
+      {
+        "name": "CodeFinder",
+        "serviceTagName": "CORE.SLS-WEB-CDF"
+      },
+      {
+        "name": "AHI",
+        "serviceTagName": "CORE.SLS-APP-AHI-X12-LOOKUP"
+      },
+      {
+        "name": "WTP",
+        "serviceTagName": "CORE.SLS-APP-WTP-SVR"
+      },
+      {
+        "name": "KDK",
+        "serviceTagName": "CORE.SLS-APP-KLONDIKE-SVR"
+      },
+      {
+        "name": "PRO_WEB",
+        "serviceTagName": "CORE.SLS-WEB-WPR"
+      },
+      {
+        "name": "EntryPointSvc",
+        "serviceTagName": "CORE.SLS-APP-RT-APS"
+      },
+      {
+        "name": "AdminConsole",
+        "serviceTagName": "CORE.SLS-APP-JUMP-SVR"
+      },
+      {
+        "name": "ExecutionPermission",
+        "serviceTagName": "CORE.SLS-APP-FB-APS,CORE.SLS-APP-RT-APS,CORE.SLS-APP-WTP-SVR,CORE.SLS-APP-KLONDIKE-SVR,CORE.SLS-WEB-WPL,CORE.SLS-APP-PRT,CORE.APP-IMP-TOOLS-ADMIN-SVR"
+      },
+      {
+        "name": "File-SVR",
+        "serviceTagName": "CORE.SLS-APP-FILE-SVR"
+      },
+      {
+        "name": "All",
+        "serviceTagName": "CORE.SLS-APP-FB-APS,CORE.SLS-APP-RT-APS,CORE.SLS-APP-WTP-SVR,CORE.SLS-APP-KLONDIKE-SVR,CORE.SLS-WEB-WPL,CORE.SLS-APP-PRT,CORE.APP-IMP-TOOLS-ADMIN-SVR"
+      },
+      {
+        "name": "CloudWatchAgent",
+        "serviceTagName": "PI.BATCH,PI.BATCH.FAST,PI.BATCH.RT,PI.BATCH.TST,PI.MSMQ,PI.MSMQ.TST"
+      },
+      {
+        "name": "Chef-Install",
+        "serviceTagName": "CORE.WEB-CHEF"
+      }
+    ],
+    "instanceIdentifier": [
+      {
+        "serviceTagName": "CORE.SLS-APP-APS",
+        "instanceTag": [
+          {
+            "name": "sales_app_aps*"
+          }
         ]
-    },
-	{   "environment": "production",
-            "applications": [
-            {
-                "name": "RCM-AHI.APP.LEGACY",
-                "instanceNameTag" : ["PE*APPL*"]
-            },
-            {
-                "name": "RCM-AHI.WEB",
-                "instanceNameTag": ["PE*WEB*"]
-            },
-            {
-                "name": "RCM-AHI.Phase2",
-                "instanceNameTag": ["PE*APPN*"]
-            },
-			{
-                "name": "RCM-AHI.DB.UPDATE",
-                "instanceNameTag": "PEC2AHIAPPN01A"
-            }
+      },
+      {
+        "serviceTagName": "CORE.SLS-WEB",
+        "instances": [
+          {
+            "name": "sales_web_wsl*"
+          }
         ]
-	}
+      },
+      {
+        "serviceTagName": "CORE.SLS-APP-JUMP-SVR",
+        "instances": [
+          {
+            "name": "sales_app_jump*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.SLS-APP-KLONDIKE-SVR",
+        "instances": [
+          {
+            "name": "sales_app_klondike*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.WEB-WPR",
+        "instances": [
+          {
+            "name": "sales_app_wpr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH",
+        "instances": [
+          {
+            "name": "sales_app_bt_pyr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH.FAST",
+        "instances": [
+          {
+            "name": "sales_app_fb_pyr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH.RT",
+        "instances": [
+          {
+            "name": "sales_app_rt_pyr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH.TST",
+        "instances": [
+          {
+            "name": "sales_app_pyr_inq*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.MSMQ",
+        "instances": [
+          {
+            "name": "sales_app_pyr_inq_logging_msmq*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.MSMQ.TST",
+        "instances": [
+          {
+            "name": "sales_app_pyr_inq*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.WEB.PCI",
+        "instances": [
+          {
+            "name": "sales_web.wsr*"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "environment": "ams_mock",
+    "applications": [
+      {
+        "name": "JUMPTest",
+        "serviceTagName": "jump.Test"
+      },
+      {
+        "name": "EventStoreScavange",
+        "serviceTagName": "CORE.MK-TOOLS-ADMIN-SVR,CORE.MK-KLONDIKE-SVR"
+      },
+      {
+        "name": "DotNetCore",
+        "serviceTagName": "CORE.MK-APP-TOOLS-ADMIN-SVR"
+      },
+      {
+        "name": "UPD-CRED-WIN",
+        "serviceTagName": "CORE.MK-APP-KLONDIKE-SVR"
+      },
+      {
+        "name": "UPD-CRED-IISPool",
+        "serviceTagName": "CORE.MK-WEB"
+      },
+      {
+        "name": "APS",
+        "serviceTagName": "CORE.MK-APP-APS"
+      },
+      {
+        "name": "mednec",
+        "serviceTagName": "CORE.MK-APP-MNC"
+      },
+      {
+        "name": "PRT",
+        "serviceTagName": "CORE.MK-APP-PRT"
+      },
+      {
+        "name": "UPD-WIN-PRT",
+        "serviceTagName": "CORE.MK-APP-PRT"
+      },
+      {
+        "name": "RC4-API",
+        "serviceTagName": "CORE.MK-APP-WBA-RC4"
+      },
+      {
+        "name": "Web_RCPlus",
+        "serviceTagName": "CORE.MK-WEB-WPL"
+      },
+      {
+        "name": "Tools",
+        "serviceTagName": "CORE.MK-APP-TOOLS-ADMIN-SVR"
+      },
+      {
+        "name": "CodeFinder",
+        "serviceTagName": "CORE.MK-WEB-CDF"
+      },
+      {
+        "name": "AHI",
+        "serviceTagName": "CORE.MK-APP-AHI-X12-LOOKUP"
+      },
+      {
+        "name": "WTP",
+        "serviceTagName": "CORE.MK-APP-WTP-SVR"
+      },
+      {
+        "name": "KDK",
+        "serviceTagName": "CORE.MK-APP-KLONDIKE-SVR"
+      },
+      {
+        "name": "PRO_WEB",
+        "serviceTagName": "CORE.MK-WEB-WPR"
+      },
+      {
+        "name": "EntryPointSvc",
+        "serviceTagName": "CORE.MK-APP-RT-APS"
+      },
+      {
+        "name": "AdminConsole",
+        "serviceTagName": "CORE.MK-APP-JUMP-SVR"
+      },
+      {
+        "name": "ExecutionPermission",
+        "serviceTagName": "CORE.MK-APP-FB-APS,CORE.MK-APP-RT-APS,CORE.MK-APP-WTP-SVR,CORE.MK-APP-KLONDIKE-SVR,CORE.MK-WEB-WPL,CORE.MK-APP-PRT,CORE.APP-IMP-TOOLS-ADMIN-SVR"
+      },
+      {
+        "name": "Chef-update_Ruby",
+        "serviceTagName": "CORE.MK-APP-FB-APS,CORE.MK-APP-RT-APS,CORE.MK-APP-WTP-SVR,CORE.MK-APP-KLONDIKE-SVR,CORE.MK-WEB-WPL,CORE.MK-APP-PRT,CORE.APP-IMP-TOOLS-ADMIN-SVR"
+      },
+      {
+        "name": "File-SVR",
+        "serviceTagName": "CORE.MK-APP-FILE-SVR"
+      },
+      {
+        "name": "MK-WEB",
+        "serviceTagName": "CORE.MK-WEB"
+      },
+      {
+        "name": "IISRESET",
+        "serviceTagName": "CORE.MK-APP-MNC-SVR,CORE.MK-APP-TOOLS-ADMIN-SVR,CORE.MK-APP-WBA-RC4,CORE.MK-WEB"
+      },
+      {
+        "name": "CloudWatchAgent",
+        "serviceTagName": "PI.BATCH,PI.BATCH.FAST,PI.BATCH.RT,PI.BATCH.TST,PI.MSMQ,PI.MSMQ.TST"
+      },
+      {
+        "name": "All",
+        "serviceTagName": "CORE.MK-APP-FB-APS,CORE.MK-APP-RT-APS,CORE.MK-APP-WTP-SVR,CORE.MK-APP-KLONDIKE-SVR,CORE.MK-WEB-WPL,CORE.MK-APP-PRT,CORE.APP-IMP-TOOLS-ADMIN-SVR"
+      }
+    ],
+    "instanceIdentifier": [
+      {
+        "serviceTagName": "jump.Test",
+        "instanceTag": [
+          {
+            "name": "mock_app_jump_server-*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.MK-APP-FB-APS",
+        "instanceTag": [
+          {
+            "name": "mock_app_aps*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.MK-APP-RT-APS",
+        "instances": [
+          {
+            "name": "mock_app_rt_aps*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.MK-APP-MNC",
+        "instances": [
+          {
+            "name": "mock_app_mnc*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.MK-APP-PRT",
+        "instances": [
+          {
+            "name": "mock_app_prt*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.MK-APP-WBA-RC4",
+        "instances": [
+          {
+            "name": "mock_app_wba_rc4*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.MK-WEB-WPL",
+        "instances": [
+          {
+            "name": "mock_web_wpl*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.MK-WEB",
+        "instances": [
+          {
+            "name": "mock_web_wpl*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.MK-APP-TOOLS-ADMIN-SVR",
+        "instances": [
+          {
+            "name": "mock_app_tools_admin_svr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.MK-WEB-CDF",
+        "instances": [
+          {
+            "name": "mock_web_cdf*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.MK-APP-AHI-X12-LOOKUP",
+        "instances": [
+          {
+            "name": "mock_app_ahi_x12_lookup*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.MK-APP-WTP-SVR",
+        "instances": [
+          {
+            "name": "mock_app_wtp*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.MK-APP-JUMP-SVR",
+        "instances": [
+          {
+            "name": "mock_app_jump*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.MK-APP-KLONDIKE-SVR",
+        "instances": [
+          {
+            "name": "mock_app_klondike*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "ORE.WEB-WPR",
+        "instances": [
+          {
+            "name": "mock_app_wpr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH",
+        "instances": [
+          {
+            "name": "mock_app_bt_pyr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH.FAST",
+        "instances": [
+          {
+            "name": "mock_app_fb_pyr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH.RT",
+        "instances": [
+          {
+            "name": "mock_app_rt_pyr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH.TST",
+        "instances": [
+          {
+            "name": "mock_app_pyr_inq*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.MSMQ",
+        "instances": [
+          {
+            "name": "mock_app_pyr_inq_logging_msmq*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.MSMQ.TST",
+        "instances": [
+          {
+            "name": "mock_app_pyr_inq*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.WEB.PCI",
+        "instances": [
+          {
+            "name": "mock_web.wsr*"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "environment": "ams_imp",
+    "applications": [
+      {
+        "name": "JUMPTest",
+        "serviceTagName": "jump.Test"
+      },
+      {
+        "name": "EventStoreScavange",
+        "serviceTagName": "CORE.IMP-TOOLS-ADMIN-SVR,CORE.IMP-KLONDIKE-SVR"
+      },
+      {
+        "name": "DotNetCore",
+        "serviceTagName": "CORE.IMP-APP-TOOLS-ADMIN-SVR"
+      },
+      {
+        "name": "IISAppPool",
+        "serviceTagName": "CORE.IMP-APP-TOOLS-ADMIN-SVR"
+      },
+      {
+        "name": "UPD-CRED-WIN",
+        "serviceTagName": "CORE.IMP-APP-KLONDIKE-SVR"
+      },
+      {
+        "name": "APS",
+        "serviceTagName": "CORE.IMP-APP-APS"
+      },
+      {
+        "name": "mednec",
+        "serviceTagName": "CORE.IMP-APP-MNC"
+      },
+      {
+        "name": "PRT",
+        "serviceTagName": "CORE.IMP-APP-PRT"
+      },
+      {
+        "name": "RC4-API",
+        "serviceTagName": "CORE.IMP-APP-WBA-RC4"
+      },
+      {
+        "name": "Web_RCPlus",
+        "serviceTagName": "CORE.IMP-WEB-WPL"
+      },
+      {
+        "name": "Tools",
+        "serviceTagName": "CORE.IMP-APP-TOOLS-ADMIN-SVR"
+      },
+      {
+        "name": "CodeFinder",
+        "serviceTagName": "CORE.IMP-WEB-CDF"
+      },
+      {
+        "name": "AHI",
+        "serviceTagName": "CORE.IMP-APP-AHI-X12-LOOKUP"
+      },
+      {
+        "name": "WTP",
+        "serviceTagName": "CORE.IMP-APP-WTP-SVR"
+      },
+      {
+        "name": "KDK",
+        "serviceTagName": "CORE.IMP-APP-KLONDIKE-SVR"
+      },
+      {
+        "name": "PRO_WEB",
+        "serviceTagName": "CORE.IMP-WEB-WPR"
+      },
+      {
+        "name": "EntryPointSvc",
+        "serviceTagName": "CORE.IMP-APP-RT-APS"
+      },
+      {
+        "name": "AdminConsole",
+        "serviceTagName": "CORE.IMP-APP-JUMP-SVR"
+      },
+      {
+        "name": "ExecutionPermission",
+        "serviceTagName": "CORE.IMP-APP-FB-APS,CORE.IMP-APP-RT-APS,CORE.IMP-APP-WTP-SVR,CORE.IMP-APP-KLONDIKE-SVR,CORE.IMP-WEB-WPL,CORE.IMP-APP-PRT,CORE.APP-IMP-TOOLS-ADMIN-SVR"
+      },
+      {
+        "name": "File-SVR",
+        "serviceTagName": "CORE.IMP-APP-FILE-SVR"
+      },
+      {
+        "name": "CloudWatchAgent",
+        "serviceTagName": "PI.BATCH,PI.BATCH.FAST,PI.BATCH.RT,PI.BATCH.TST,PI.MSMQ,PI.MSMQ.TST"
+      },
+      {
+        "name": "All",
+        "serviceTagName": "CORE.IMP-APP-FB-APS,CORE.IMP-APP-RT-APS,CORE.IMP-APP-WTP-SVR,CORE.IMP-APP-KLONDIKE-SVR,CORE.IMP-WEB-WPL,CORE.IMP-APP-PRT,CORE.APP-IMP-TOOLS-ADMIN-SVR"
+      }
+    ],
+    "instanceIdentifier": [
+      {
+        "serviceTagName": "jump.Test",
+        "instanceTag": [
+          {
+            "name": "prod_app_jump_server-4"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.IMP-APP-FB-APS",
+        "instanceTag": [
+          {
+            "name": "imp_app_fb_aps*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.IMP-APP-RT-APS",
+        "instances": [
+          {
+            "name": "imp_app_rt_aps*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.IMP-APP-MNC",
+        "instances": [
+          {
+            "name": "imp_app_mnc*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.IMP-APP-PRT",
+        "instances": [
+          {
+            "name": "imp_app_prt*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.IMP-APP-WBA-RC4",
+        "instances": [
+          {
+            "name": "imp_app_wba_rc4*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.IMP-WEB-WPL",
+        "instances": [
+          {
+            "name": "imp_web_wpl*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.IMP-APP-TOOLS-ADMIN-SVR",
+        "instances": [
+          {
+            "name": "imp_app_tools_admin_svr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.IMP-WEB-CDF",
+        "instances": [
+          {
+            "name": "imp_web_cdf*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.IMP-APP-AHI-X12-LOOKUP",
+        "instances": [
+          {
+            "name": "imp_app_ahi_x12_lookup*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.IMP-APP-WTP-SVR",
+        "instances": [
+          {
+            "name": "imp_app_wtp*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.IMP-APP-JUMP-SVR",
+        "instances": [
+          {
+            "name": "imp_app_jump*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.IMP-APP-KLONDIKE-SVR",
+        "instances": [
+          {
+            "name": "imp_app_klondike*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "ORE.WEB-WPR",
+        "instances": [
+          {
+            "name": "imp_app_wpr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH",
+        "instances": [
+          {
+            "name": "imp_app_bt_pyr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH.FAST",
+        "instances": [
+          {
+            "name": "imp_app_fb_pyr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH.RT",
+        "instances": [
+          {
+            "name": "imp_app_rt_pyr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH.TST",
+        "instances": [
+          {
+            "name": "imp_app_pyr_inq*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.MSMQ",
+        "instances": [
+          {
+            "name": "imp_app_pyr_inq_logging_msmq*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.MSMQ.TST",
+        "instances": [
+          {
+            "name": "imp_app_pyr_inq*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.WEB.PCI",
+        "instances": [
+          {
+            "name": "imp_web.wsr*"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "environment": "ams_prod",
+    "applications": [
+      {
+        "name": "JUMPTest",
+        "serviceTagName": "jump.Test"
+      },
+      {
+        "name": "EventStoreScavange",
+        "serviceTagName": "CORE.APP-TOOLS-ADMIN-SVR,CORE.APP-KLONDIKE-SVR"
+      },
+      {
+        "name": "DotNetCore",
+        "serviceTagName": "CORE.APP-TOOLS-ADMIN-SVR,CORE.APP-JUMP-SVR"
+      },
+      {
+        "name": "APS",
+        "serviceTagName": "CORE.APP-RT-APS,CORE.APP-FB-APS"
+      },
+      {
+        "name": "mednec",
+        "serviceTagName": "CORE.APP-MNC"
+      },
+      {
+        "name": "PRT",
+        "serviceTagName": "CORE.APP-PRT"
+      },
+      {
+        "name": "RC4-API",
+        "serviceTagName": "CORE.APP-WBA-RC4"
+      },
+      {
+        "name": "Web_RCPlus",
+        "serviceTagName": "CORE.WEB-WPL"
+      },
+      {
+        "name": "Tools",
+        "serviceTagName": "CORE.APP-TOOLS-ADMIN-SVR"
+      },
+      {
+        "name": "CodeFinder",
+        "serviceTagName": "CORE.WEB-CDF"
+      },
+      {
+        "name": "AHI",
+        "serviceTagName": "CORE.APP-AHI-X12-LOOKUP"
+      },
+      {
+        "name": "WTP",
+        "serviceTagName": "CORE.APP-WTP-SVR"
+      },
+      {
+        "name": "KDK",
+        "serviceTagName": "CORE.APP-KLONDIKE-SVR"
+      },
+      {
+        "name": "PRO_WEB",
+        "serviceTagName": "ORE.WEB-WPR"
+      },
+      {
+        "name": "EntryPointSvc",
+        "serviceTagName": "CORE.APP-RT-APS"
+      },
+      {
+        "name": "AdminConsole",
+        "serviceTagName": "CORE.APP-JUMP-SVR"
+      },
+      {
+        "name": "ExecutionPermission",
+        "serviceTagName": "CORE.APP-FB-APS,CORE.APP-RT-APS,CORE.APP-WTP-SVR,CORE.APP-KLONDIKE-SVR,CORE.WEB-WPL,CORE.APP-PRT,CORE.APP-TOOLS-ADMIN-SVR"
+      },
+      {
+        "name": "Core-File-SVR",
+        "serviceTagName": "CORE.APP-FILE-SVR"
+      },
+      {
+        "name": "File-SVR",
+        "serviceTagName": "CORE.APP-FILE-SVR"
+      },
+      {
+        "name": "CloudWatchAgent",
+        "serviceTagName": "PI.BATCH,PI.BATCH.FAST,PI.BATCH.RT,PI.BATCH.TST,PI.MSMQ,PI.MSMQ.TST"
+      },
+      {
+        "name": "All",
+        "serviceTagName": "CORE.APP-FB-APS,CORE.APP-RT-APS,CORE.APP-WTP-SVR,CORE.APP-KLONDIKE-SVR,CORE.WEB-WPL,CORE.APP-PRT,CORE.APP-TOOLS-ADMIN-SVR"
+      }
+    ],
+    "instanceIdentifier": [
+      {
+        "serviceTagName": "jump.Test",
+        "instanceTag": [
+          {
+            "name": "prod_app_jump_server-4"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.APP-FB-APS",
+        "instanceTag": [
+          {
+            "name": "prod_app_fb_aps*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.APP-RT-APS",
+        "instances": [
+          {
+            "name": "prod_app_rt_aps*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.APP-MNC",
+        "instances": [
+          {
+            "name": "prod_app_mnc*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.APP-PRT",
+        "instances": [
+          {
+            "name": "prod_app_prt*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.APP-WBA-RC4",
+        "instances": [
+          {
+            "name": "prod_app_wba_rc4*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.WEB-WPL",
+        "instances": [
+          {
+            "name": "prod_web_wpl*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.APP-TOOLS-ADMIN-SVR",
+        "instances": [
+          {
+            "name": "prod_app_tools_admin_svr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.WEB-CDF",
+        "instances": [
+          {
+            "name": "prod_web_cdf*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.APP-AHI-X12-LOOKUP",
+        "instances": [
+          {
+            "name": "prod_app_ahi_x12_lookup*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.APP-WTP-SVR",
+        "instances": [
+          {
+            "name": "prod_app_wtp*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.APP-JUMP-SVR",
+        "instances": [
+          {
+            "name": "prod_app_jump*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "CORE.APP-KLONDIKE-SVR",
+        "instances": [
+          {
+            "name": "prod_app_klondike*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "ORE.WEB-WPR",
+        "instances": [
+          {
+            "name": "prod_app_wpr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH",
+        "instances": [
+          {
+            "name": "prod_app_bt_pyr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH.FAST",
+        "instances": [
+          {
+            "name": "prod_app_fb_pyr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH.RT",
+        "instances": [
+          {
+            "name": "prod_app_rt_pyr*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.BATCH.TST",
+        "instances": [
+          {
+            "name": "prod_app_pyr_inq*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.MSMQ",
+        "instances": [
+          {
+            "name": "prod_app_pyr_inq_logging_msmq*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.MSMQ.TST",
+        "instances": [
+          {
+            "name": "prod_app_pyr_inq*"
+          }
+        ]
+      },
+      {
+        "serviceTagName": "PI.WEB.PCI",
+        "instances": [
+          {
+            "name": "prod_web.wsr*"
+          }
+        ]
+      }
+    ]
+  }
 ]
