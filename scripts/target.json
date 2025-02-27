@@ -312,7 +312,7 @@
         ]
       },
       {
-        "serviceTagName": "CORE.MK-APP-FB-APS",
+        "serviceTagName": "CORE.MK-APP-APS",
         "instanceTag": [
           {
             "name": "mock_app_aps*"
