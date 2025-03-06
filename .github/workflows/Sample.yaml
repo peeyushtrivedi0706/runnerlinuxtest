@@ -82,7 +82,7 @@ jobs:
         $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
 
         # Convert the response to JSON
-        $environmentVariable = $response | ConvertTo-Json -Depth 10
+        $environmentVariable = $response | ConvertTo-Json -Depth 10 -Compress
         Write-Output "environmentVariable=$environmentVariable" >> $env:GITHUB_OUTPUT
 
         # Output the JSON response
@@ -94,7 +94,7 @@ jobs:
         $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
 
         # Convert the response to JSON
-        $repositoryVariable = $response | ConvertTo-Json -Depth 10
+        $repositoryVariable = $response | ConvertTo-Json -Depth 10 -Compress
         Write-Output $repositoryVariable
         Write-Output "repositoryVariable=$repositoryVariable" >> $env:GITHUB_OUTPUT
 
