@@ -68,6 +68,7 @@ jobs:
     - name: checkout
       uses: actions/checkout@v4
     - name: Testing
+      id: testing
       run: |
         # Define variables
         $token = "${{secrets.PAT}}"
@@ -100,8 +101,10 @@ jobs:
 
     - name: Replace Values
       run: |
-        $envVariable=${{steps.Testing.outputs.environmentVariable}}
-        $Variable=${{steps.Testing.outputs.repositoryVariable}}
+        $env.environmentVariable
+        ${{env.environmentVariable}}
+        $envVariable=${{steps.testing.outputs.environmentVariable}}
+        $Variable=${{steps.testing.outputs.repositoryVariable}}
         write-host $envVariable
         write-host $Variable
         # Perform variable substitution
