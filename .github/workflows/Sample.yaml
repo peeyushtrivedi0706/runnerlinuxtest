@@ -95,10 +95,11 @@ jobs:
         $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
 
         # Convert the response to JSON
+        echo $response.variables[0]
+
         $repositoryVariable = $response | ConvertTo-Json -Depth 10 -Compress
         Write-Output $repositoryVariable
         Write-Output "repositoryVariable=$repositoryVariable" >> $env:GITHUB_OUTPUT
-        echo $repositoryVariable.variables[0]
     - name: Replace Values
       run: |
         $envVariable='${{steps.testing.outputs.environmentVariable}}' | ConvertFrom-Json
