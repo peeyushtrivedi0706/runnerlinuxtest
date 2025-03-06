@@ -131,3 +131,8 @@ jobs:
           # Save the modified XML configuration file
             $xmlConfig.Save($configUrl)
           write-host $xmlConfig
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{github.workspace}}\scripts\web.config
