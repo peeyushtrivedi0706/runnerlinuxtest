@@ -64,7 +64,7 @@ jobs:
       matrix:
         Target: ${{fromJson(needs.InitializeMatrix.outputs.Target)}}
         # Target: ["1", "2"]
-    runs-on: ${{inputs.environment == 'ams_mock'  && 'windows' || (inputs.environment == 'ams_imp'  && 'CLR-MOCK' || 'windows')}}
+    runs-on: ${{inputs.environment == 'ams_mock'  && 'windows' || (inputs.environment == 'ams_imp'  && 'windows-latest' || 'windows')}}
     steps:
       - name: Testing
         run: |
