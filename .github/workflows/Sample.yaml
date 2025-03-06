@@ -71,8 +71,8 @@ jobs:
       id: testing
       run: |
         # Define variables
-        # $token = "${{secrets.PAT}}"
-        $token = "${{secrets.GITHUB_TOKEN}}"
+        $token = "${{secrets.PAT}}"
+        # $token = "${{secrets.GITHUB_TOKEN}}"
         $owner = "peeyushtrivedi0706"
         $repo = "runnerlinuxtest"
         $environment = "${{inputs.environment}}"
