@@ -114,6 +114,8 @@ jobs:
               $variableName = $setting.value.Replace("#{","").Replace("}","")
               write-host $variableName
               $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
+              write-host $value
+
               if($value -ne $null)
               {
                 $setting.value=$value.value
@@ -121,6 +123,7 @@ jobs:
               else
               {
                 $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
+                write-host $value
                 if($value -ne $null)
                 {
                   $setting.value=$value.value
