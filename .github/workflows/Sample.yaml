@@ -81,9 +81,17 @@ jobs:
           $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
           
           # Convert the response to JSON
-          $jsonResponse = $response | ConvertTo-Json -Depth 10
+          $environmentVariable = $response | ConvertTo-Json -Depth 10
           
           # Output the JSON response
           Write-Output $jsonResponse
+          # Set the GitHub API URL
+          $url = "https://api.github.com/repos/$owner/$repo/actions/variables"
+          
+          # Make the API request
+          $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
+          
+          # Convert the response to JSON
+          $repositoryVariable = $response | ConvertTo-Json -Depth 10
 
       
