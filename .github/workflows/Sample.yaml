@@ -1,5 +1,5 @@
 name: Clearance sample workflow
-
+permissions: write-all
 on:
   workflow_dispatch:
     inputs:
@@ -71,7 +71,8 @@ jobs:
       id: testing
       run: |
         # Define variables
-        $token = "${{secrets.PAT}}"
+        # $token = "${{secrets.PAT}}"
+        $token = "${{secrets.GITHUB_TOKEN}}"
         $owner = "peeyushtrivedi0706"
         $repo = "runnerlinuxtest"
         $environment = "${{inputs.environment}}"
@@ -132,6 +133,28 @@ jobs:
               }
             }
           }
+          foreach ($setting in $xmlConfig.configuration.connectionStrings.add) {
+              if ($setting.connectionString -like "#{*}") {
+               $variableName = $setting.value.Replace("#{","").Replace("}","")
+              write-host $variableName
+              $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
+              write-host $value
+
+              if($value -ne $null)
+              {
+                $setting.connectionString=$value.value
+              }
+              else
+              {
+                $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
+                write-host $value
+                if($value -ne $null)
+                {
+                  $setting.connectionString=$value.value
+                }
+              }
+              }
+            }
           # Save the modified XML configuration file
             $xmlConfig.Save($configUrl)
           write-host $xmlConfig
