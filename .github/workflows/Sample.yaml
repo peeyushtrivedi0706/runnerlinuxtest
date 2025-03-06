@@ -101,8 +101,8 @@ jobs:
 
     - name: Replace Values
       run: |
-        $envVariable='${{steps.testing.outputs.environmentVariable}}' | ConvertTo-Json
-        $Variable='${{steps.testing.outputs.repositoryVariable}}' | ConvertTo-Json
+        $envVariable='${{steps.testing.outputs.environmentVariable}}' | ConvertFrom-Json
+        $Variable='${{steps.testing.outputs.repositoryVariable}}' | ConvertFrom-Json
         write-host $envVariable
         write-host $Variable
         $configUrl="${{github.workspace}}\scripts\web.config"
