@@ -21,7 +21,7 @@ env:
 
 jobs:
   InitializeMatrix:
-    runs-on: ${{inputs.environment == 'ams_mock'  && 'windows' || (inputs.environment == 'ams_imp'  && 'CLR-MOCK' || 'windows')}}
+    runs-on: ${{inputs.environment == 'ams_mock'  && 'windows' || (inputs.environment == 'ams_imp'  && 'windows-latest' || 'windows')}}
     outputs:
       Target: ${{steps.set-output.outputs.Target}}
     steps:
