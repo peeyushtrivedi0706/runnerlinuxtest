@@ -84,7 +84,7 @@ jobs:
           $environmentVariable = $response | ConvertTo-Json -Depth 10
           
           # Output the JSON response
-          Write-Output $jsonResponse
+          Write-Output $environmentVariable
           # Set the GitHub API URL
           $url = "https://api.github.com/repos/$owner/$repo/actions/variables"
           
@@ -93,5 +93,6 @@ jobs:
           
           # Convert the response to JSON
           $repositoryVariable = $response | ConvertTo-Json -Depth 10
+          Write-Output $repositoryVariable
 
       
