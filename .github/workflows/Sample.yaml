@@ -101,14 +101,33 @@ jobs:
 
     - name: Replace Values
       run: |
-        $envVariable='${{steps.testing.outputs.environmentVariable}}'
-        $Variable='${{steps.testing.outputs.repositoryVariable}}'
+        $envVariable='${{steps.testing.outputs.environmentVariable}}' | ConvertTo-Json
+        $Variable='${{steps.testing.outputs.repositoryVariable}}' | ConvertTo-Json
         write-host $envVariable
         write-host $Variable
+        $configUrl="${{github.workspace}}\scripts\web.config"
         # Perform variable substitution
           [xml]$xmlConfig = Get-Content "${{github.workspace}}\scripts\web.config"
           foreach ($setting in $xmlConfig.configuration.appSettings.add) {
             if ($setting.value -like "#{*}") {
               write-host $setting.value
+              $variableName = $setting.value.Replace("#{","").Replace("}","")
+              write-host $variableName
+              $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
+              if($value -nq $null)
+              {
+                $setting.value=$value.value
+              }
+              else
+              {
+                $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
+                if($value -nq $null)
+                {
+                  $setting.value=$value.value
+                }
+              }
             }
           }
+          # Save the modified XML configuration file
+            $xmlConfig.Save($configUrl)
+          write-host $xmlConfig
