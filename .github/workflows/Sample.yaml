@@ -101,10 +101,8 @@ jobs:
 
     - name: Replace Values
       run: |
-        $env.environmentVariable
-        ${{env.environmentVariable}}
-        $envVariable=${{steps.testing.outputs.environmentVariable}}
-        $Variable=${{steps.testing.outputs.repositoryVariable}}
+        $envVariable='${{steps.testing.outputs.environmentVariable}}'
+        $Variable='${{steps.testing.outputs.repositoryVariable}}'
         write-host $envVariable
         write-host $Variable
         # Perform variable substitution
