@@ -68,6 +68,22 @@ jobs:
     steps:
       - name: Testing
         run: |
-          Invoke-Command -Computername ${{ matrix.target }} -FilePath ${{ github.workspace }}\scripts\Test.ps1
+          # Define variables
+          $token = "${{secrets.PAT}}"
+          $owner = "peeyushtrivedi0706"
+          $repo = "runnerlinuxtest"
+          $environment = "${{inputs.environment}}"
+          
+          # Set the GitHub API URL
+          $url = "https://api.github.com/repos/$owner/$repo/environments/$environment/variables"
+          
+          # Make the API request
+          $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
+          
+          # Convert the response to JSON
+          $jsonResponse = $response | ConvertTo-Json -Depth 10
+          
+          # Output the JSON response
+          Write-Output $jsonResponse
 
       
