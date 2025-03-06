@@ -102,8 +102,8 @@ jobs:
       run: |
         $envVariable=${{steps.Testing.outputs.environmentVariable}}
         $Variable=${{steps.Testing.outputs.repositoryVariable}}
-        write-host "$envVariable"
-        write-host "$Variable"
+        write-host $envVariable
+        write-host $Variable
         # Perform variable substitution
           [xml]$xmlConfig = Get-Content "${{github.workspace}}\scripts\web.config"
           foreach ($setting in $xmlConfig.configuration.appSettings.add) {
