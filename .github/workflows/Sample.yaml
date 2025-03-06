@@ -20,49 +20,49 @@ env:
   appName: "JUMPTest"
 
 jobs:
-  InitializeMatrix:
-    runs-on: ${{inputs.environment == 'ams_mock'  && 'windows' || (inputs.environment == 'ams_imp'  && 'windows-latest' || 'windows')}}
-    outputs:
-      Target: ${{steps.set-output.outputs.Target}}
-    steps:
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+  # InitializeMatrix:
+  #   runs-on: ${{inputs.environment == 'ams_mock'  && 'windows' || (inputs.environment == 'ams_imp'  && 'windows-latest' || 'windows')}}
+  #   outputs:
+  #     Target: ${{steps.set-output.outputs.Target}}
+  #   steps:
+  #   - name: Configure AWS credentials
+  #     uses: aws-actions/configure-aws-credentials@v2
+  #     with:
+  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #       aws-region: us-east-1
 
-    - name: Check user info
-      run: |
-        $hostname = hostname
-        Write-Host "Running on host: $hostname"
-        Write-Host "Path"
-        pwd
-        Write-Host "list files"
-        dir
-        Write-Host "current user info 1"
-        Get-LocalUser | Where-Object { $_.Name -eq $env:USERNAME }
-        Write-Host "current user info 2"
-        whoami /user
-        Write-Host "current user info 3"
-        $env:USERNAME
-        Write-Host "current user info 4"
-        Get-WmiObject -Class Win32_ComputerSystem | Select-Object -Property UserName
+  #   - name: Check user info
+  #     run: |
+  #       $hostname = hostname
+  #       Write-Host "Running on host: $hostname"
+  #       Write-Host "Path"
+  #       pwd
+  #       Write-Host "list files"
+  #       dir
+  #       Write-Host "current user info 1"
+  #       Get-LocalUser | Where-Object { $_.Name -eq $env:USERNAME }
+  #       Write-Host "current user info 2"
+  #       whoami /user
+  #       Write-Host "current user info 3"
+  #       $env:USERNAME
+  #       Write-Host "current user info 4"
+  #       Get-WmiObject -Class Win32_ComputerSystem | Select-Object -Property UserName
 
-    - name: checkout
-      uses: actions/checkout@v4
+  #   - name: checkout
+  #     uses: actions/checkout@v4
 
-    - name: Set output
-      id: set-output
-      run: |
-        powershell.exe -File "${{github.workspace}}\scripts\get-run-matrix.ps1" -environment ${{inputs.environment}} -region ${{ vars.region }} -appName ${{ env.appName }}
+  #   - name: Set output
+  #     id: set-output
+  #     run: |
+  #       powershell.exe -File "${{github.workspace}}\scripts\get-run-matrix.ps1" -environment ${{inputs.environment}} -region ${{ vars.region }} -appName ${{ env.appName }}
 
   sampleTest:
-    needs: [ InitializeMatrix ]
+    # needs: [ InitializeMatrix ]
     strategy:
       matrix:
-        Target: ${{fromJson(needs.InitializeMatrix.outputs.Target)}}
-        # Target: ["1", "2"]
+        # Target: ${{fromJson(needs.InitializeMatrix.outputs.Target)}}
+        Target: ["1"]
     runs-on: ${{inputs.environment == 'ams_mock'  && 'windows' || (inputs.environment == 'ams_imp'  && 'windows-latest' || 'windows')}}
     steps:
     - name: checkout
