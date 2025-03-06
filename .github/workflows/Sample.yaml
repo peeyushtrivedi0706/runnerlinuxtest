@@ -9,11 +9,11 @@ on:
         default: "Selection needed"
         type: choice
         options:
-          - ams_prod
-          - ams_imp
-          - ams_mock
-          - Selection needed
-         
+        - ams_prod
+        - ams_imp
+        - ams_mock
+        - Selection needed
+
 env:
   environment: ${{ github.event.inputs.environment }}
   # appName: ${{inputs.applications=='ams_aps' && 'APS' || (inputs.applications == 'ams_prt' && 'PRT' || (inputs.applications == 'ams_web_rcplus' && 'Web_RCPlus' || (inputs.applications == 'ams_rc4_api' && 'RC4API')))}}
@@ -25,74 +25,89 @@ jobs:
     outputs:
       Target: ${{steps.set-output.outputs.Target}}
     steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-          
-      - name: Check user info
-        run: |
-          $hostname = hostname
-          Write-Host "Running on host: $hostname"
-          Write-Host "Path"
-          pwd
-          Write-Host "list files"
-          dir
-          Write-Host "current user info 1"
-          Get-LocalUser | Where-Object { $_.Name -eq $env:USERNAME }
-          Write-Host "current user info 2"
-          whoami /user
-          Write-Host "current user info 3"
-          $env:USERNAME
-          Write-Host "current user info 4"
-          Get-WmiObject -Class Win32_ComputerSystem | Select-Object -Property UserName
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
 
-      - name: checkout
-        uses: actions/checkout@v4
+    - name: Check user info
+      run: |
+        $hostname = hostname
+        Write-Host "Running on host: $hostname"
+        Write-Host "Path"
+        pwd
+        Write-Host "list files"
+        dir
+        Write-Host "current user info 1"
+        Get-LocalUser | Where-Object { $_.Name -eq $env:USERNAME }
+        Write-Host "current user info 2"
+        whoami /user
+        Write-Host "current user info 3"
+        $env:USERNAME
+        Write-Host "current user info 4"
+        Get-WmiObject -Class Win32_ComputerSystem | Select-Object -Property UserName
 
-      - name: Set output
-        id: set-output
-        run: |
-          powershell.exe -File "${{github.workspace}}\scripts\get-run-matrix.ps1" -environment ${{inputs.environment}} -region ${{ vars.region }} -appName ${{ env.appName }}
-  
-  
+    - name: checkout
+      uses: actions/checkout@v4
+
+    - name: Set output
+      id: set-output
+      run: |
+        powershell.exe -File "${{github.workspace}}\scripts\get-run-matrix.ps1" -environment ${{inputs.environment}} -region ${{ vars.region }} -appName ${{ env.appName }}
+
   sampleTest:
-    needs: [InitializeMatrix]
+    needs: [ InitializeMatrix ]
     strategy:
       matrix:
         Target: ${{fromJson(needs.InitializeMatrix.outputs.Target)}}
         # Target: ["1", "2"]
     runs-on: ${{inputs.environment == 'ams_mock'  && 'windows' || (inputs.environment == 'ams_imp'  && 'windows-latest' || 'windows')}}
     steps:
-      - name: Testing
-        run: |
-          # Define variables
-          $token = "${{secrets.PAT}}"
-          $owner = "peeyushtrivedi0706"
-          $repo = "runnerlinuxtest"
-          $environment = "${{inputs.environment}}"
-          
-          # Set the GitHub API URL
-          $url = "https://api.github.com/repos/$owner/$repo/environments/$environment/variables"
-          
-          # Make the API request
-          $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
-          
-          # Convert the response to JSON
-          $environmentVariable = $response | ConvertTo-Json -Depth 10
-          
-          # Output the JSON response
-          Write-Output $environmentVariable
-          # Set the GitHub API URL
-          $url = "https://api.github.com/repos/$owner/$repo/actions/variables"
-          
-          # Make the API request
-          $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
-          
-          # Convert the response to JSON
-          $repositoryVariable = $response | ConvertTo-Json -Depth 10
-          Write-Output $repositoryVariable
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: Testing
+      run: |
+        # Define variables
+        $token = "${{secrets.PAT}}"
+        $owner = "peeyushtrivedi0706"
+        $repo = "runnerlinuxtest"
+        $environment = "${{inputs.environment}}"
 
-      
+        # Set the GitHub API URL
+        $url = "https://api.github.com/repos/$owner/$repo/environments/$environment/variables"
+
+        # Make the API request
+        $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
+
+        # Convert the response to JSON
+        $environmentVariable = $response | ConvertTo-Json -Depth 10
+        Write-Output "environmentVariable=$environmentVariable" >> $env:GITHUB_OUTPUT
+
+        # Output the JSON response
+        Write-Output $environmentVariable
+        # Set the GitHub API URL
+        $url = "https://api.github.com/repos/$owner/$repo/actions/variables"
+
+        # Make the API request
+        $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
+
+        # Convert the response to JSON
+        $repositoryVariable = $response | ConvertTo-Json -Depth 10
+        Write-Output $repositoryVariable
+        Write-Output "repositoryVariable=$repositoryVariable" >> $env:GITHUB_OUTPUT
+
+    - name: Replace Values
+      run: |
+        $envVariable=${{steps.Testing.outputs.environmentVariable}}
+        $Variable=${{steps.Testing.outputs.repositoryVariable}}
+        write-host "$envVariable"
+        write-host "$Variable"
+        # Perform variable substitution
+          [xml]$xmlConfig = Get-Content "${{github.workspace}}\scripts\web.config"
+          foreach ($setting in $xmlConfig.configuration.appSettings.add) {
+            if ($setting.value -like "#{*}") {
+              write-host $setting.value
+            }
+          }
