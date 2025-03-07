@@ -143,6 +143,8 @@ runs:
       else
       {
         $jsonContent = Get-Content $configUrl -Raw | ConvertFrom-Json
+        write-host "jsonContent"
+        write-host $jsonContent
         
         $jsonObject.PSObject.Properties | ForEach-Object {
             $variableName = $_.Name
