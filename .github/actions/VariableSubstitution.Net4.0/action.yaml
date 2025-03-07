@@ -147,6 +147,7 @@ runs:
               }
           }
         }
+     
             
       
         write-host "looping through xml for all configuration.client.endpoint"
@@ -185,8 +186,8 @@ runs:
                 }
               }
             }
-        }
-     
+          }
+
             
         write-host "looping through xml for all xmlConfig.configuration.'kafka.producer'.add"
         foreach ($setting in $xmlConfig.configuration.'kafka.producer'.add) {
@@ -223,7 +224,8 @@ runs:
                   }
                 }
               }
-        }
+            }
+          }
       
         write-host "looping through xml for all xmlConfig.configuration.'kafka.shared'.add"
         foreach ($setting in $xmlConfig.configuration.'kafka.shared'.add) {
@@ -260,9 +262,8 @@ runs:
                   }
                 }
               }
+          }      
         }
-      
-      }
         # Save the modified XML configuration file
         $xmlConfig.Save($configUrl)
         write-host "XML File saved to location $configUrl"
