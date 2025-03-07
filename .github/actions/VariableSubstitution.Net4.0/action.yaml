@@ -40,7 +40,7 @@ runs:
 
       # Set the GitHub API URL
       $url = "https://api.github.com/repos/$owner/$repo/environments/$environment/variables"
-
+      Write-Host "$url"
       # Make the API request
       $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
 
