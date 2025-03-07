@@ -69,8 +69,9 @@ runs:
       $Variable='${{steps.testing.outputs.repositoryVariable}}' | ConvertFrom-Json
       $configUrl="${{inputs.filePath}}" 
 
-      $response = aws secretsmanager get-secret-value --secret-id ${{ inputs.secrets_path }} --region ${{ inputs.region }} | ConvertFrom-Json
-      $response = $response.SecretString | ConvertFrom-Json
+      # $response = aws secretsmanager get-secret-value --secret-id ${{ inputs.secrets_path }} --region ${{ inputs.region }} | ConvertFrom-Json
+      # $response = $response.SecretString | ConvertFrom-Json
+      $response = Get-Content ${{ github.workspace }}\scripts\awsSecret.json -Raw | ConvertFrom-Json
       write-host $response
       if("${{inputs.type}}" -eq "XML")
       {
