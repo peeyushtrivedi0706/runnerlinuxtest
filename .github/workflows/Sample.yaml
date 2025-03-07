@@ -67,98 +67,23 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v4
-    - name: Testing
-      id: testing
-      run: |
-        # Define variables
-        $token = "${{secrets.PAT}}"
-        # $token = "${{secrets.GITHUB_TOKEN}}"
-        $owner = "peeyushtrivedi0706"
-        $repo = "runnerlinuxtest"
-        $environment = "${{inputs.environment}}"
+    - name: variable Substitution
+        uses: ./actions/VariableSubstitution.Net4.0
+        with:
+          environment: ${{ inputs.environment }}
+          access_token: ${{ secrets.PAT }}
+          secrets_path: ${{ env.secrets_path }}
+          filePath: ${{ github.workspace }}\scripts\web.config
+          type: XML
 
-        # Set the GitHub API URL
-        $url = "https://api.github.com/repos/$owner/$repo/environments/$environment/variables"
-
-        # Make the API request
-        $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
-
-        # Convert the response to JSON
-        $environmentVariable = $response | ConvertTo-Json -Depth 10 -Compress
-        Write-Output "environmentVariable=$environmentVariable" >> $env:GITHUB_OUTPUT
-
-        # Output the JSON response
-        Write-Output $environmentVariable
-        # Set the GitHub API URL
-        $url = "https://api.github.com/repos/$owner/$repo/actions/variables"
-
-        # Make the API request
-        $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
-
-        # Convert the response to JSON
-        echo $response.variables[0]
-
-        $repositoryVariable = $response | ConvertTo-Json -Depth 10 -Compress
-        Write-Output $repositoryVariable
-        Write-Output "repositoryVariable=$repositoryVariable" >> $env:GITHUB_OUTPUT
-    - name: Replace Values
-      run: |
-        $envVariable='${{steps.testing.outputs.environmentVariable}}' | ConvertFrom-Json
-        $Variable='${{steps.testing.outputs.repositoryVariable}}' | ConvertFrom-Json
-        write-host $envVariable
-        write-host $Variable
-        $configUrl="${{github.workspace}}\scripts\web.config"
-        # Perform variable substitution
-          [xml]$xmlConfig = Get-Content "${{github.workspace}}\scripts\web.config"
-          foreach ($setting in $xmlConfig.configuration.appSettings.add) {
-            if ($setting.value -like "#{*}") {
-              write-host $setting.value
-              $variableName = $setting.value.Replace("#{","").Replace("}","")
-              write-host $variableName
-              $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
-              write-host $value
-
-              if($value -ne $null)
-              {
-                $setting.value=$value.value
-              }
-              else
-              {
-                $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
-                write-host $value
-                if($value -ne $null)
-                {
-                  $setting.value=$value.value
-                }
-              }
-            }
-          }
-          foreach ($setting in $xmlConfig.configuration.connectionStrings.add) {
-              if ($setting.connectionString -like "#{*}") {
-               $variableName = $setting.value.Replace("#{","").Replace("}","")
-              write-host $variableName
-              $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
-              write-host $value
-
-              if($value -ne $null)
-              {
-                $setting.connectionString=$value.value
-              }
-              else
-              {
-                $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
-                write-host $value
-                if($value -ne $null)
-                {
-                  $setting.connectionString=$value.value
-                }
-              }
-              }
-            }
-          # Save the modified XML configuration file
-            $xmlConfig.Save($configUrl)
-          write-host $xmlConfig
-
+      - name: variable Substitution
+        uses: ./actions/VariableSubstitution.Net4.0
+        with:
+          environment: ${{ inputs.environment }}
+          access_token: ${{ secrets.PAT }}
+          secrets_path: ${{ env.secrets_path }}
+          filePath: ${{ github.workspace }}\scripts\appsettings.json
+          type: JSON
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:

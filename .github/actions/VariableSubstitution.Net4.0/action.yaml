@@ -1,0 +1,160 @@
+name: CodeCoverage.Net.4.0
+inputs:
+  filePath:
+    description: "file path for variable substitution"
+    required: false
+    type: string
+  type:
+    description: "file type for variable substitution XML/JSON"
+    required: true
+    type: string
+  environment:
+    description: "environment for variable substitution"
+    required: true
+    type: string
+  access_token:
+    description: "access token for variable substitution"
+    required: true
+    type: string
+  secrets_path:
+    description: "secrets path for variable substitution"
+    required: true
+    type: string
+runs:
+  using: "composite"
+  steps:
+
+  - name: Testing
+    id: testing
+    run: |
+      # Define variables
+      $token = "${{inputs.access_token}}"
+      # $token = "${{inputs.access_token}}"
+      $owner = "${{github.repository_owner}}"
+      $repo = "${{github.repository}}"
+      $environment = "${{inputs.environment}}"
+
+      # Set the GitHub API URL
+      $url = "https://api.github.com/repos/$owner/$repo/environments/$environment/variables"
+
+      # Make the API request
+      $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
+
+      # Convert the response to JSON
+      $environmentVariable = $response | ConvertTo-Json -Depth 10 -Compress
+      Write-Output "environmentVariable=$environmentVariable" >> $env:GITHUB_OUTPUT
+
+      # Output the JSON response
+      Write-Output $environmentVariable
+      # Set the GitHub API URL
+      $url = "https://api.github.com/repos/$owner/$repo/actions/variables"
+
+      # Make the API request
+      $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
+
+      # Convert the response to JSON
+      echo $response.variables[0]
+
+      $repositoryVariable = $response | ConvertTo-Json -Depth 10 -Compress
+      Write-Output $repositoryVariable
+      Write-Output "repositoryVariable=$repositoryVariable" >> $env:GITHUB_OUTPUT
+
+  - name: Replace Values
+    run: |
+      $envVariable='${{steps.testing.outputs.environmentVariable}}' | ConvertFrom-Json
+      $Variable='${{steps.testing.outputs.repositoryVariable}}' | ConvertFrom-Json
+      $configUrl="${{inputs.filePath}}" 
+
+      $response = aws secretsmanager get-secret-value --secret-id ${{ inputs.secrets_path }} --region ${{ vars.region }} | ConvertFrom-Json
+      $response = $response.SecretString | ConvertFrom-Json
+      write-host $response
+      if("${{inputs.type}}" -eq "XML")
+      {
+        # Perform variable substitution
+        [xml]$xmlConfig = Get-Content $configUrl
+        foreach ($setting in $xmlConfig.configuration.appSettings.add) {
+          if ($setting.value -like "#{*}") {
+            write-host $setting.value
+            $variableName = $setting.value.Replace("#{","").Replace("}","")
+            write-host $variableName
+            $value= $response.$variableName 
+            write-host $value
+            if($value -ne $null)
+            {
+              $setting.value=$value
+            }else {
+              $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
+              write-host $value
+              if($value -ne $null)
+              {
+                $setting.value=$value.value
+              }
+              else
+              {
+                $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
+                write-host $value
+                if($value -ne $null)
+                {
+                  $setting.value=$value.value
+                }
+              }
+            }
+          }
+        }
+        foreach ($setting in $xmlConfig.configuration.connectionStrings.add) {
+            if ($setting.connectionString -like "#{*}") {
+              $variableName = $setting.value.Replace("#{","").Replace("}","")
+              write-host $variableName
+              $value= $response.$variableName
+              write-host $value
+              if($value -ne $null)
+              {
+                $setting.connectionString=$value
+              }
+              else
+              {
+                
+                $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
+                write-host $value
+                if($value -ne $null)
+                {
+                  $setting.connectionString=$value.value
+                }
+                else
+                {
+                  $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
+                  write-host $value
+                  if($value -ne $null)
+                  {
+                    $setting.connectionString=$value.value
+                  }
+                }
+              }
+          }
+
+        # Save the modified XML configuration file
+          $xmlConfig.Save($configUrl)
+        write-host $xmlConfig
+      }
+      else
+      {
+        $jsonContent = Get-Content $configUrl -Raw | ConvertFrom-Json
+        
+        $jsonObject.PSObject.Properties | ForEach-Object {
+            $variableName = $_.Name
+            $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
+            if($value -ne $null)
+            {
+              $jsonObject.$variableName=$value.value
+            }
+            else
+            {
+              $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
+              if($value -ne $null)
+              {
+                $jsonObject.$variableName=$value.value
+              }
+            }
+         }
+          $jsonContent | ConvertTo-Json -Depth 100 | Set-Content $configUrl
+      }
