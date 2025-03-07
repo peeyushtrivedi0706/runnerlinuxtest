@@ -151,7 +151,7 @@ runs:
         $xmlConfig.Save($configUrl)
         write-host "XML File saved to location $configUrl"
       }
-      else if("${{inputs.type}}" -eq "JSON")
+      elseif("${{inputs.type}}" -eq "JSON")
       {
         write-host "Getting fileContent $configUrl"
         $jsonContent = Get-Content $configUrl -Raw | ConvertFrom-Json
