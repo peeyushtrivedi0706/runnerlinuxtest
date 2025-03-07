@@ -68,7 +68,7 @@ jobs:
     - name: checkout
       uses: actions/checkout@v4
     - name: variable Substitution
-        uses: ./actions/VariableSubstitution.Net4.0
+        uses: ./.github/actions/VariableSubstitution.Net4.0
         with:
           environment: ${{ inputs.environment }}
           access_token: ${{ secrets.PAT }}
@@ -77,7 +77,7 @@ jobs:
           type: XML
 
       - name: variable Substitution
-        uses: ./actions/VariableSubstitution.Net4.0
+        uses: ./.github/actions/VariableSubstitution.Net4.0
         with:
           environment: ${{ inputs.environment }}
           access_token: ${{ secrets.PAT }}
