@@ -59,7 +59,7 @@ runs:
       $repositoryVariable = $response | ConvertTo-Json -Depth 10 -Compress
    
       $envVariable= $environmentVariable | ConvertFrom-Json
-      $Variable= repositoryVariable | ConvertFrom-Json
+      $Variable= $repositoryVariable | ConvertFrom-Json
       $configUrl="${{inputs.filePath}}" 
 
       # Get Secrets from AWS
