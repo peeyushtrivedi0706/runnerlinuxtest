@@ -39,7 +39,7 @@ runs:
       $environment = "${{inputs.environment}}"
 
       # Set the GitHub API URL
-      $url = "https://api.github.com/repos/$owner/$repo/environments/$environment/variables"
+      $url = "https://api.github.com/repos/$repo/environments/$environment/variables"
       Write-Host "$url"
       # Make the API request
       $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
@@ -51,7 +51,7 @@ runs:
       # Output the JSON response
       Write-Output $environmentVariable
       # Set the GitHub API URL
-      $url = "https://api.github.com/repos/$owner/$repo/actions/variables"
+      $url = "https://api.github.com/repos/$repo/actions/variables"
 
       # Make the API request
       $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
