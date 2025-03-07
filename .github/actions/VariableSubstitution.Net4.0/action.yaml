@@ -111,7 +111,42 @@ runs:
           }
         }
         write-host "looping through xml for all connectionStrings"
-        foreach ($setting in $xmlConfig.configuration.connectionStrings.add) {
+        foreach ($setting in $xmlConfig.configuration.'system.serviceModel'.bindings.basicHttpBinding.binding.security) {
+            if ($setting.mode -like "#{*}") {
+              $variableName = $setting.mode.Replace("#{","").Replace("}","")
+              write-host "Preparing for $variableName value replacement"
+              $value= $awsSecrets.$variableName
+              if($value -ne $null)
+              {
+                write-host "== Variable  found in Secret replacing value for $variableName"
+                $setting.mode=$value
+              }
+              else
+              {
+                write-host "== Variable  not found in Secret checking in Environment Variable for $variableName"
+                $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
+                if($value -ne $null)
+                {
+                  write-host "== Variable  found in Environment Variable replacing value for $variableName"
+                  $setting.mode=$value.value
+                }
+                else
+                {
+                  write-host "== Variable  not found in Environment Variable checking in Repository Variable for $variableName"
+                  $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
+                  if($value -ne $null)
+                  {
+                    write-host "== Variable  found in RepositoryEnvironment Variable replacing value for $variableName"
+                    $setting.mode=$value.value
+                  }
+                  else
+                  {
+                    write-host "== Variable  not found for $variableName"
+                  }
+                }
+              }
+          }
+     
             if ($setting.connectionString -like "#{*}") {
               $variableName = $setting.connectionString.Replace("#{","").Replace("}","")
               write-host "Preparing for $variableName value replacement"
@@ -146,6 +181,7 @@ runs:
                 }
               }
           }
+      
       }
         # Save the modified XML configuration file
         $xmlConfig.Save($configUrl)
