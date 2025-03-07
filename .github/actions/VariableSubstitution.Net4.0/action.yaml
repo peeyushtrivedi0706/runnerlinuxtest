@@ -146,7 +146,9 @@ runs:
         
         $jsonObject.PSObject.Properties | ForEach-Object {
             $variableName = $_.Name
+            write-host $variableName
             $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
+            write-host $value
             if($value -ne $null)
             {
               $jsonObject.$variableName=$value.value
@@ -154,6 +156,7 @@ runs:
             else
             {
               $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
+              write-host $value
               if($value -ne $null)
               {
                 $jsonObject.$variableName=$value.value
