@@ -110,7 +110,7 @@ runs:
             }
           }
         }
-        write-host "looping through xml for all connectionStrings"
+        write-host "looping through xml for all serviceModel"
         foreach ($setting in $xmlConfig.configuration.'system.serviceModel'.bindings.basicHttpBinding.binding.security) {
             if ($setting.mode -like "#{*}") {
               $variableName = $setting.mode.Replace("#{","").Replace("}","")
