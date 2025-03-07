@@ -135,9 +135,9 @@ runs:
                 }
               }
           }
-
+		    }
         # Save the modified XML configuration file
-          $xmlConfig.Save($configUrl)
+        $xmlConfig.Save($configUrl)
         write-host $xmlConfig
       }
       else
