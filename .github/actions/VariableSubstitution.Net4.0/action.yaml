@@ -147,14 +147,18 @@ runs:
               }
           }
      
-            if ($setting.connectionString -like "#{*}") {
-              $variableName = $setting.connectionString.Replace("#{","").Replace("}","")
+            
+      
+        write-host "looping through xml for all configuration.client.endpoint"
+        foreach ($setting in $xmlConfig.configuration.client.endpoint) {
+            if ($setting.address -like "#{*}") {
+              $variableName = $setting.address.Replace("#{","").Replace("}","")
               write-host "Preparing for $variableName value replacement"
               $value= $awsSecrets.$variableName
               if($value -ne $null)
               {
                 write-host "== Variable  found in Secret replacing value for $variableName"
-                $setting.connectionString=$value
+                $setting.address=$value
               }
               else
               {
@@ -163,7 +167,7 @@ runs:
                 if($value -ne $null)
                 {
                   write-host "== Variable  found in Environment Variable replacing value for $variableName"
-                  $setting.connectionString=$value.value
+                  $setting.address=$value.value
                 }
                 else
                 {
@@ -172,7 +176,82 @@ runs:
                   if($value -ne $null)
                   {
                     write-host "== Variable  found in RepositoryEnvironment Variable replacing value for $variableName"
-                    $setting.connectionString=$value.value
+                    $setting.address=$value.value
+                  }
+                  else
+                  {
+                    write-host "== Variable  not found for $variableName"
+                  }
+                }
+              }
+          }
+     
+            
+        write-host "looping through xml for all xmlConfig.configuration.'kafka.producer'.add"
+        foreach ($setting in $xmlConfig.configuration.'kafka.producer'.add) {
+            if ($setting.address -like "#{*}") {
+              $variableName = $setting.value.Replace("#{","").Replace("}","")
+              write-host "Preparing for $variableName value replacement"
+              $value= $awsSecrets.$variableName
+              if($value -ne $null)
+              {
+                write-host "== Variable  found in Secret replacing value for $variableName"
+                $setting.value=$value
+              }
+              else
+              {
+                write-host "== Variable  not found in Secret checking in Environment Variable for $variableName"
+                $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
+                if($value -ne $null)
+                {
+                  write-host "== Variable  found in Environment Variable replacing value for $variableName"
+                  $setting.value=$value.value
+                }
+                else
+                {
+                  write-host "== Variable  not found in Environment Variable checking in Repository Variable for $variableName"
+                  $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
+                  if($value -ne $null)
+                  {
+                    write-host "== Variable  found in RepositoryEnvironment Variable replacing value for $variableName"
+                    $setting.value=$value.value
+                  }
+                  else
+                  {
+                    write-host "== Variable  not found for $variableName"
+                  }
+                }
+              }
+          }
+      
+        write-host "looping through xml for all xmlConfig.configuration.'kafka.shared'.add"
+        foreach ($setting in $xmlConfig.configuration.'kafka.shared'.add) {
+            if ($setting.address -like "#{*}") {
+              $variableName = $setting.value.Replace("#{","").Replace("}","")
+              write-host "Preparing for $variableName value replacement"
+              $value= $awsSecrets.$variableName
+              if($value -ne $null)
+              {
+                write-host "== Variable  found in Secret replacing value for $variableName"
+                $setting.value=$value
+              }
+              else
+              {
+                write-host "== Variable  not found in Secret checking in Environment Variable for $variableName"
+                $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
+                if($value -ne $null)
+                {
+                  write-host "== Variable  found in Environment Variable replacing value for $variableName"
+                  $setting.value=$value.value
+                }
+                else
+                {
+                  write-host "== Variable  not found in Environment Variable checking in Repository Variable for $variableName"
+                  $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
+                  if($value -ne $null)
+                  {
+                    write-host "== Variable  found in RepositoryEnvironment Variable replacing value for $variableName"
+                    $setting.value=$value.value
                   }
                   else
                   {
