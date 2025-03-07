@@ -110,6 +110,43 @@ runs:
             }
           }
         }
+      write-host "looping through xml for all connectionStrings"
+       foreach ($setting in $xmlConfig.configuration.connectionStrings.add) {
+              if ($setting.connectionString -like "#{*}") {
+                $variableName = $setting.connectionString.Replace("#{","").Replace("}","")
+                write-host "Preparing for $variableName value replacement"
+                $value= $awsSecrets.$variableName
+                if($value -ne $null)
+                {
+                  write-host "== Variable  found in Secret replacing value for $variableName"
+                  $setting.connectionString=$value
+                }
+                else
+                {
+                  write-host "== Variable  not found in Secret checking in Environment Variable for $variableName"
+                  $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
+                  if($value -ne $null)
+                  {
+                    write-host "== Variable  found in Environment Variable replacing value for $variableName"
+                    $setting.connectionString=$value.value
+                  }
+                  else
+                  {
+                    write-host "== Variable  not found in Environment Variable checking in Repository Variable for $variableName"
+                    $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
+                    if($value -ne $null)
+                    {
+                      write-host "== Variable  found in RepositoryEnvironment Variable replacing value for $variableName"
+                      $setting.connectionString=$value.value
+                    }
+                    else
+                    {
+                      write-host "== Variable  not found for $variableName"
+                    }
+                  }
+                }
+       }
+
         write-host "looping through xml for all serviceModel"
         foreach ($setting in $xmlConfig.configuration.'system.serviceModel'.bindings.basicHttpBinding.binding.security) {
             if ($setting.mode -like "#{*}") {
