@@ -58,7 +58,7 @@ runs:
       $repositoryVariable = $response | ConvertTo-Json -Depth 10 -Compress
       Write-Output $repositoryVariable
       Write-Output "repositoryVariable=$repositoryVariable" >> $env:GITHUB_OUTPUT
-
+    shell: powershell
   - name: Replace Values
     run: |
       $envVariable='${{steps.testing.outputs.environmentVariable}}' | ConvertFrom-Json
@@ -158,3 +158,4 @@ runs:
          }
           $jsonContent | ConvertTo-Json -Depth 100 | Set-Content $configUrl
       }
+    shell: powershell
