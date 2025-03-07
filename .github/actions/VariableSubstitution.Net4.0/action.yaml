@@ -134,7 +134,7 @@ runs:
                 }
               }
           }
-		    }
+      }
         # Save the modified XML configuration file
         $xmlConfig.Save($configUrl)
         write-host $xmlConfig
@@ -160,5 +160,5 @@ runs:
             }
          }
           $jsonContent | ConvertTo-Json -Depth 100 | Set-Content $configUrl
-      }
+       }
     shell: powershell
