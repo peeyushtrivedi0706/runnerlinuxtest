@@ -157,11 +157,10 @@ runs:
         $jsonContent = Get-Content $configUrl -Raw | ConvertFrom-Json
               
         $jsonContent.PSObject.Properties | ForEach-Object {
+        
+        $variableName = $_.Name
         if($jsonContent.$variableName -like '#{*}')
         {
-
-        $variableName = $_.Name
-        write-host $variableName
         write-host "Preparing for $variableName value replacement"
 
         $value= $response.$variableName
