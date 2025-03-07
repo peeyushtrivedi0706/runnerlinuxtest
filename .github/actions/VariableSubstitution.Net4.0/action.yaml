@@ -147,8 +147,15 @@ runs:
         write-host $jsonContent
         
         $jsonContent.PSObject.Properties | ForEach-Object {
-            $variableName = $_.Name
-            write-host $variableName
+        $variableName = $_.Name
+        write-host $variableName
+        $value= $response.$variableName
+          write-host $value
+          if($value -ne $null)
+          {
+            $setting.connectionString=$value
+          }
+          else{
             $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
             write-host $value
             if($value -ne $null)
@@ -164,6 +171,7 @@ runs:
                 $jsonContent.$variableName=$value.value
               }
             }
+          }
          }
           $jsonContent | ConvertTo-Json -Depth 100 | Set-Content $configUrl
        }
