@@ -80,31 +80,31 @@ runs:
             
             if($value -ne $null)
             {
-              write-host "Variable found in Secret replacing value for $variableName"
+              write-host "== Variable  found in Secret replacing value for $variableName"
               $setting.value=$value
             }else {
               # if not in AWS Check in Environment Variable
-              write-host "Variable not found in Secret checking in Environment Variable for $variableName"
+              write-host "== Variable  not found in Secret checking in Environment Variable for $variableName"
               $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
               
               if($value -ne $null)
               {
-                write-host "Variable found in Environment Variable replacing value for $variableName"
+                write-host "== Variable  found in Environment Variable replacing value for $variableName"
                 $setting.value=$value.value
               }
               else
               {
                 # If not in Environment then Check in Repository
-                write-host "Variable not found in Environment Variable checking in Repository Variable for $variableName"
+                write-host "== Variable  not found in Environment Variable checking in Repository Variable for $variableName"
                 $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
                 if($value -ne $null)
                 {
-                  write-host "Variable found in Repository Variable replacing value for $variableName"
+                  write-host "== Variable  found in Repository Variable replacing value for $variableName"
                   $setting.value=$value.value
                 }
                 else
                 {
-                  write-host "Variable not found for $variableName"
+                  write-host "== Variable  not found for $variableName"
                 }
               }
             }
@@ -118,30 +118,30 @@ runs:
               $value= $awsSecrets.$variableName
               if($value -ne $null)
               {
-                write-host "Variable found in Secret replacing value for $variableName"
+                write-host "== Variable  found in Secret replacing value for $variableName"
                 $setting.connectionString=$value
               }
               else
               {
-                write-host "Variable not found in Secret checking in Environment Variable for $variableName"
+                write-host "== Variable  not found in Secret checking in Environment Variable for $variableName"
                 $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
                 if($value -ne $null)
                 {
-                  write-host "Variable found in Environment Variable replacing value for $variableName"
+                  write-host "== Variable  found in Environment Variable replacing value for $variableName"
                   $setting.connectionString=$value.value
                 }
                 else
                 {
-                  write-host "Variable not found in Environment Variable checking in Repository Variable for $variableName"
+                  write-host "== Variable  not found in Environment Variable checking in Repository Variable for $variableName"
                   $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
                   if($value -ne $null)
                   {
-                    write-host "Variable found in RepositoryEnvironment Variable replacing value for $variableName"
+                    write-host "== Variable  found in RepositoryEnvironment Variable replacing value for $variableName"
                     $setting.connectionString=$value.value
                   }
                   else
                   {
-                    write-host "Variable not found for $variableName"
+                    write-host "== Variable  not found for $variableName"
                   }
                 }
               }
@@ -163,32 +163,32 @@ runs:
         {
         write-host "Preparing for $variableName value replacement"
 
-        $value= $response.$variableName
+        $value= $awsSecrets.$variableName
           if($value -ne $null)
           {
-            write-host "Variable found in Secret replacing value for $variableName"
+            write-host "== Variable  found in Secret replacing value for $variableName"
             $jsonContent.$variableName=$value
           }
           else{
-            write-host "Variable not found in Secret checking in Environment Variable for $variableName"
+            write-host "== Variable  not found in Secret checking in Environment Variable for $variableName"
             $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
             if($value -ne $null)
             {
-              write-host "Variable found in Environment Variable replacing value for $variableName"
+              write-host "== Variable  found in Environment Variable replacing value for $variableName"
               $jsonContent.$variableName=$value.value
             }
             else
             {
-              write-host "Variable not found in Environment Variable checking in Repository Variable for $variableName"
+              write-host "== Variable  not found in Environment Variable checking in Repository Variable for $variableName"
               $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
               if($value -ne $null)
               {
-                write-host "Variable found in Repository Variable replacing value for $variableName"
+                write-host "== Variable  found in Repository Variable replacing value for $variableName"
                 $jsonContent.$variableName=$value.value
               }
               else
                {
-                    write-host "Variable not found for $variableName"
+                    write-host "== Variable  not found for $variableName"
                 }
              }
            }
