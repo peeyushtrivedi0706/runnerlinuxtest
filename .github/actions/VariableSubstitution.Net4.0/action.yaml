@@ -108,7 +108,7 @@ runs:
         }
         foreach ($setting in $xmlConfig.configuration.connectionStrings.add) {
             if ($setting.connectionString -like "#{*}") {
-              $variableName = $setting.value.Replace("#{","").Replace("}","")
+              $variableName = $setting.connectionString.Replace("#{","").Replace("}","")
               write-host $variableName
               $value= $response.$variableName
               write-host $value
