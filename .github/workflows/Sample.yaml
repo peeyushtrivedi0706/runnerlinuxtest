@@ -68,17 +68,17 @@ jobs:
     - name: checkout
       uses: actions/checkout@v4
     - name: variable Substitution
-        uses: ./.github/actions/VariableSubstitution.Net4.0
-        with:
+      uses: ./.github/actions/VariableSubstitution.Net4.0
+      with:
           environment: ${{ inputs.environment }}
           access_token: ${{ secrets.PAT }}
           secrets_path: ${{ env.secrets_path }}
           filePath: ${{ github.workspace }}\scripts\web.config
           type: XML
 
-      - name: variable Substitution
-        uses: ./.github/actions/VariableSubstitution.Net4.0
-        with:
+    - name: variable Substitution
+      uses: ./.github/actions/VariableSubstitution.Net4.0
+      with:
           environment: ${{ inputs.environment }}
           access_token: ${{ secrets.PAT }}
           secrets_path: ${{ env.secrets_path }}
