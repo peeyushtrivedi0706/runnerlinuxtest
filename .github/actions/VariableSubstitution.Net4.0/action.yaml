@@ -28,7 +28,7 @@ runs:
   using: "composite"
   steps:
 
-  - name: Testing
+  - name: fetching-Variable and Replace values
     id: testing
     run: |
       # Define variables
@@ -40,97 +40,108 @@ runs:
 
       # Set the GitHub API URL
       $url = "https://api.github.com/repos/$repo/environments/$environment/variables"
-      Write-Host "$url"
+      Write-Host "Fecthing Environment variable from $url"
       # Make the API request
       $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
 
       # Convert the response to JSON
       $environmentVariable = $response | ConvertTo-Json -Depth 10 -Compress
-      Write-Output "environmentVariable=$environmentVariable" >> $env:GITHUB_OUTPUT
 
       # Output the JSON response
-      Write-Output $environmentVariable
       # Set the GitHub API URL
       $url = "https://api.github.com/repos/$repo/actions/variables"
+      Write-Host "Fecthing Environment Repository Variables from $url"
 
       # Make the API request
       $response = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "token $token" } -Method Get
 
       # Convert the response to JSON
-      echo $response.variables[0]
-
       $repositoryVariable = $response | ConvertTo-Json -Depth 10 -Compress
-      Write-Output $repositoryVariable
-      Write-Output "repositoryVariable=$repositoryVariable" >> $env:GITHUB_OUTPUT
-    shell: powershell
-  - name: Replace Values
-    run: |
-      $envVariable='${{steps.testing.outputs.environmentVariable}}' | ConvertFrom-Json
-      $Variable='${{steps.testing.outputs.repositoryVariable}}' | ConvertFrom-Json
+   
+      $envVariable= $environmentVariable | ConvertFrom-Json
+      $Variable= repositoryVariable | ConvertFrom-Json
       $configUrl="${{inputs.filePath}}" 
 
+      # Get Secrets from AWS
       # $response = aws secretsmanager get-secret-value --secret-id ${{ inputs.secrets_path }} --region ${{ inputs.region }} | ConvertFrom-Json
-      # $response = $response.SecretString | ConvertFrom-Json
-      $response = Get-Content ${{ github.workspace }}\scripts\awsSecret.json -Raw | ConvertFrom-Json
-      write-host $response
+      # $awsSecrets = $response.SecretString | ConvertFrom-Json
+      $awsSecrets = Get-Content ${{ github.workspace }}\scripts\awsSecret.json -Raw | ConvertFrom-Json
       if("${{inputs.type}}" -eq "XML")
       {
         # Perform variable substitution
         [xml]$xmlConfig = Get-Content $configUrl
+        write-host "looping through xml for all variables"
         foreach ($setting in $xmlConfig.configuration.appSettings.add) {
           if ($setting.value -like "#{*}") {
-            write-host $setting.value
+            # Check in Aws Sceret
             $variableName = $setting.value.Replace("#{","").Replace("}","")
-            write-host $variableName
-            $value= $response.$variableName 
-            write-host $value
+            write-host "Preparing for $variableName value replacement"
+            $value= $awsSecrets.$variableName 
+            
             if($value -ne $null)
             {
+              write-host "Variable found in Secret replacing value for $variableName"
               $setting.value=$value
             }else {
+              # if not in AWS Check in Environment Variable
+              write-host "Variable not found in Secret checking in Environment Variable for $variableName"
               $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
-              write-host $value
+              
               if($value -ne $null)
               {
+                write-host "Variable found in Environment Variable replacing value for $variableName"
                 $setting.value=$value.value
               }
               else
               {
+                # If not in Environment then Check in Repository
+                write-host "Variable not found in Environment Variable checking in Repository Variable for $variableName"
                 $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
-                write-host $value
                 if($value -ne $null)
                 {
+                  write-host "Variable found in Repository Variable replacing value for $variableName"
                   $setting.value=$value.value
+                }
+                else
+                {
+                  write-host "Variable not found for $variableName"
                 }
               }
             }
           }
         }
+        write-host "looping through xml for all connectionStrings"
         foreach ($setting in $xmlConfig.configuration.connectionStrings.add) {
             if ($setting.connectionString -like "#{*}") {
               $variableName = $setting.connectionString.Replace("#{","").Replace("}","")
-              write-host $variableName
-              $value= $response.$variableName
-              write-host $value
+              write-host "Preparing for $variableName value replacement"
+              $value= $awsSecrets.$variableName
               if($value -ne $null)
               {
+                write-host "Variable found in Secret replacing value for $variableName"
                 $setting.connectionString=$value
               }
               else
               {
+                write-host "Variable not found in Secret checking in Environment Variable for $variableName"
                 $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
-                write-host $value
                 if($value -ne $null)
                 {
+                  write-host "Variable found in Environment Variable replacing value for $variableName"
                   $setting.connectionString=$value.value
                 }
                 else
                 {
+                  write-host "Variable not found in Environment Variable checking in Repository Variable for $variableName"
                   $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
-                  write-host $value
                   if($value -ne $null)
                   {
+                    write-host "Variable found in RepositoryEnvironment Variable replacing value for $variableName"
                     $setting.connectionString=$value.value
+                  }
+                  else
+                  {
+                    write-host "Variable not found for $variableName"
                   }
                 }
               }
@@ -138,41 +149,57 @@ runs:
       }
         # Save the modified XML configuration file
         $xmlConfig.Save($configUrl)
-        write-host $xmlConfig
+        write-host "XML File saved to location $configUrl"
       }
-      else
+      else if("${{inputs.type}}" -eq "JSON")
       {
+        write-host "Getting fileContent $configUrl"
         $jsonContent = Get-Content $configUrl -Raw | ConvertFrom-Json
-        write-host "jsonContent"
-        write-host $jsonContent
-        
+              
         $jsonContent.PSObject.Properties | ForEach-Object {
+        if($jsonContent.$variableName -like '#{*}')
+        {
+
         $variableName = $_.Name
         write-host $variableName
+        write-host "Preparing for $variableName value replacement"
+
         $value= $response.$variableName
-          write-host $value
           if($value -ne $null)
           {
+            write-host "Variable found in Secret replacing value for $variableName"
             $jsonContent.$variableName=$value
           }
           else{
+            write-host "Variable not found in Secret checking in Environment Variable for $variableName"
             $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
-            write-host $value
             if($value -ne $null)
             {
+              write-host "Variable found in Environment Variable replacing value for $variableName"
               $jsonContent.$variableName=$value.value
             }
             else
             {
+              write-host "Variable not found in Environment Variable checking in Repository Variable for $variableName"
               $value= $Variable.variables | Where-Object {$_.name -eq $variableName }
-              write-host $value
               if($value -ne $null)
               {
+                write-host "Variable found in Repository Variable replacing value for $variableName"
                 $jsonContent.$variableName=$value.value
               }
-            }
+              else
+               {
+                    write-host "Variable not found for $variableName"
+                }
+             }
+           }
           }
          }
           $jsonContent | ConvertTo-Json -Depth 100 | Set-Content $configUrl
+          write-host "Json File saved to location $configUrl"
+       }
+       else
+       {
+        write-host "${{inputs.type}} Not Supported. Please send XML or JSON."
        }
     shell: powershell
