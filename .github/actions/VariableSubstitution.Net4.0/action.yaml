@@ -117,7 +117,6 @@ runs:
               }
               else
               {
-                
                 $value= $envVariable.variables | Where-Object {$_.name -eq $variableName }
                 write-host $value
                 if($value -ne $null)
