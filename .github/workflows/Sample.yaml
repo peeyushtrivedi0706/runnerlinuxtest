@@ -20,6 +20,16 @@ env:
   appName: "JUMPTest"
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set version and environment
+        run: |
+          VERSION=1.2.3
+          ENV_NAME=production
+          echo "### Deployment Info" >> $GITHUB_STEP_SUMMARY
+          echo "- Version: $VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "- Environment: $ENV_NAME" >> $GITHUB_STEP_SUMMARY
   # InitializeMatrix:
   #   runs-on: ${{inputs.environment == 'ams_mock'  && 'windows' || (inputs.environment == 'ams_imp'  && 'windows-latest' || 'windows')}}
   #   outputs:
