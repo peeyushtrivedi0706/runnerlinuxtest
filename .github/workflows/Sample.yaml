@@ -62,7 +62,7 @@ jobs:
     strategy:
       matrix:
         # Target: ${{fromJson(needs.InitializeMatrix.outputs.Target)}}
-        Target: ["1"]
+        Target: ["${{inputs.environment}}"]
     runs-on: ${{inputs.environment == 'ams_mock'  && 'windows' || (inputs.environment == 'ams_imp'  && 'windows-latest' || 'windows')}}
     steps:
     - name: checkout
